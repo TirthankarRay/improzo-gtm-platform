@@ -386,33 +386,82 @@ const AccountsScreen = ({ setActiveScreen, setSelectedAccount }) => {
 
 function SignalEngineScreen() {
   const [verifiedSignals, setVerifiedSignals] = useState({});
-  
+  const [activeTab, setActiveTab] = useState("scrapers");
+  const [signalEngineData, setSignalEngineData] = useState(SIGNALS);
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [aiScanning, setAiScanning] = useState(false);
+  const [aiResults, setAiResults] = useState([]);
+  const [aiSourceTypes, setAiSourceTypes] = useState({
+    "News": false,
+    "PR Wires": false,
+    "Job Boards": false,
+    "LinkedIn": false,
+    "Regulatory": false,
+    "SEC": false,
+  });
+  const [aiDateRange, setAiDateRange] = useState("This Week");
+  const [aiCompanyFilter, setAiCompanyFilter] = useState("all");
+  const [aiConfidenceThreshold, setAiConfidenceThreshold] = useState(70);
+
   const signalsBySource = useMemo(() => {
     const grouped = {};
-    SIGNALS.forEach(s => {
+    signalEngineData.forEach(s => {
       grouped[s.sourceType] = (grouped[s.sourceType] || 0) + 1;
     });
     return Object.entries(grouped).map(([type, count]) => ({ name: type, value: count }));
-  }, []);
+  }, [signalEngineData]);
 
   const signalsByClassification = useMemo(() => {
     const grouped = {};
-    SIGNALS.forEach(s => {
+    signalEngineData.forEach(s => {
       grouped[s.type] = (grouped[s.type] || 0) + 1;
     });
     return Object.entries(grouped).map(([type, count]) => ({ name: type.length > 12 ? type.slice(0, 11) + "..." : type, value: count }));
-  }, []);
+  }, [signalEngineData]);
 
   const confidenceData = [
-    { range: "80-100%", count: SIGNALS.filter(s => s.confidence >= 80).length, color: "#10b981" },
-    { range: "60-79%", count: SIGNALS.filter(s => s.confidence >= 60 && s.confidence < 80).length, color: "#f59e0b" },
-    { range: "&lt;60lt;60%", count: SIGNALS.filter(s => s.confidence < 60).length, color: "#ef4444" },
+    { range: "80-100%", count: signalEngineData.filter(s => s.confidence >= 80).length, color: "#10b981" },
+    { range: "60-79%", count: signalEngineData.filter(s => s.confidence >= 60 && s.confidence < 80).length, color: "#f59e0b" },
+    { range: "&lt;60lt;60%", count: signalEngineData.filter(s => s.confidence < 60).length, color: "#ef4444" },
   ];
 
   const COLORS = ["#7c3aed", "#0ea5e9", "#f59e0b", "#10b981", "#ef4444", "#6366f1"];
 
   const toggleVerify = (signalId, status) => {
     setVerifiedSignals(prev => ({ ...prev, [signalId]: status }));
+    setSignalEngineData(prev => prev.map(s => s.id === signalId ? { ...s, verified: status } : s));
+  };
+
+  const handleAiScan = () => {
+    if (!aiPrompt.trim()) return;
+
+    setAiScanning(true);
+
+    // Simulate scanning delay
+    setTimeout(() => {
+      // Parse prompt and filter signals
+      const filtered = signalEngineData.filter(s => {
+        let matches = true;
+
+        // Company filter
+        if (aiCompanyFilter !== "all") {
+          matches = matches && s.account === aiCompanyFilter;
+        }
+
+        // Confidence threshold
+        matches = matches && s.confidence >= aiConfidenceThreshold;
+
+        // Check if signal is relevant to the prompt
+        const promptLower = aiPrompt.toLowerCase();
+        const detailLower = s.detail.toLowerCase();
+        matches = matches && (detailLower.includes("databricks") || detailLower.includes("snowflake") || detailLower.includes("cdo") || detailLower.includes("cto") || detailLower.includes("expansion") || detailLower.includes("hiring"));
+
+        return matches;
+      });
+
+      setAiResults(filtered.slice(0, 6));
+      setAiScanning(false);
+    }, 2500);
   };
 
   return (
@@ -440,7 +489,18 @@ function SignalEngineScreen() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 p-5">
+      {/* Tabs Navigation */}
+      <div className="bg-white rounded-xl border border-slate-200 border-b-0">
+        <div className="flex items-center gap-0.5 px-5 py-0 flex-wrap">
+          <button onClick={() => setActiveTab("scrapers")} className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${activeTab === "scrapers" ? "border-violet-600 text-violet-600" : "border-transparent text-slate-600 hover:text-slate-900"}`}><Database size={14} className="inline mr-1.5" /> Scrapers</button>
+          <button onClick={() => setActiveTab("pipeline")} className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${activeTab === "pipeline" ? "border-violet-600 text-violet-600" : "border-transparent text-slate-600 hover:text-slate-900"}`}><Zap size={14} className="inline mr-1.5" /> Pipeline</button>
+          <button onClick={() => setActiveTab("feed")} className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${activeTab === "feed" ? "border-violet-600 text-violet-600" : "border-transparent text-slate-600 hover:text-slate-900"}`}><Activity size={14} className="inline mr-1.5" /> Feed</button>
+          <button onClick={() => setActiveTab("ai-scanner")} className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${activeTab === "ai-scanner" ? "border-violet-600 text-violet-600" : "border-transparent text-slate-600 hover:text-slate-900"}`}><BrainCircuit size={14} className="inline mr-1.5" /> AI Scanner</button>
+        </div>
+      </div>
+
+      {activeTab === "scrapers" && (
+      <div className="bg-white rounded-xl border border-slate-200 p-5 rounded-t-none border-t-0">
         <h3 className="font-semibold text-slate-900 mb-4 flex items-center gap-2"><Database size={16} className="text-slate-600" /> Scraper Status (15 sources)</h3>
         <div className="overflow-hidden">
           <table className="w-full text-sm">
@@ -474,8 +534,10 @@ function SignalEngineScreen() {
           </table>
         </div>
       </div>
+      )}
 
-      <div className="bg-white rounded-xl border border-slate-200 p-5">
+      {activeTab === "pipeline" && (
+      <div className="bg-white rounded-xl border border-slate-200 p-5 rounded-t-none border-t-0">
         <h3 className="font-semibold text-slate-900 mb-4 flex items-center gap-2"><Zap size={16} className="text-amber-500" /> Signal Processing Pipeline</h3>
         <div className="flex items-center gap-4 py-8">
           <div className="flex-1 text-center">
@@ -503,79 +565,196 @@ function SignalEngineScreen() {
           </div>
         </div>
       </div>
+      )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl border border-slate-200 p-5">
-          <h3 className="font-semibold text-slate-900 mb-4">Real-time Signal Feed (Last 10)</h3>
-          <div className="space-y-2 max-h-96 overflow-y-auto">
-            {SIGNALS.slice(0, 10).map(s => (
-              <div key={s.id} className="p-3 border border-slate-100 rounded-lg hover:bg-slate-50">
-                <div className="flex items-start gap-3 justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <SignalTypeIcon type={s.type} />
-                      <span className="text-xs font-medium text-slate-700">{s.detail.substring(0, 40)}...</span>
+      {activeTab === "feed" && (
+      <div className="bg-white rounded-xl border border-slate-200 p-5 rounded-t-none border-t-0">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div>
+            <h3 className="font-semibold text-slate-900 mb-4">Real-time Signal Feed (Last 10)</h3>
+            <div className="space-y-2 max-h-96 overflow-y-auto">
+              {signalEngineData.slice(0, 10).map(s => (
+                <div key={s.id} className="p-3 border border-slate-100 rounded-lg hover:bg-slate-50">
+                  <div className="flex items-start gap-3 justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <SignalTypeIcon type={s.type} />
+                        <span className="text-xs font-medium text-slate-700">{s.detail.substring(0, 40)}...</span>
+                      </div>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <SourceTypeBadge sourceType={s.sourceType} />
+                        <ConfidenceBadge confidence={s.confidence} />
+                        {s.nlpClassified && <Badge variant="default" className="text-xs">AI Classified</Badge>}
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <SourceTypeBadge sourceType={s.sourceType} />
-                      <ConfidenceBadge confidence={s.confidence} />
-                      {s.nlpClassified && <Badge variant="default" className="text-xs">AI Classified</Badge>}
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <button onClick={() => toggleVerify(s.id, true)} className={`px-2 py-1 rounded text-xs font-medium transition-colors ${verifiedSignals[s.id] === true ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-600 hover:bg-emerald-50"}`}><CheckCircle size={12} className="inline mr-1" />Verify</button>
+                      <button onClick={() => toggleVerify(s.id, false)} className={`px-2 py-1 rounded text-xs font-medium transition-colors ${verifiedSignals[s.id] === false ? "bg-red-100 text-red-700" : "bg-slate-100 text-slate-600 hover:bg-red-50"}`}><XCircle size={12} className="inline mr-1" />Reject</button>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    <button onClick={() => toggleVerify(s.id, true)} className={`px-2 py-1 rounded text-xs font-medium transition-colors ${verifiedSignals[s.id] === true ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-600 hover:bg-emerald-50"}`}><CheckCircle size={12} className="inline mr-1" />Verify</button>
-                    <button onClick={() => toggleVerify(s.id, false)} className={`px-2 py-1 rounded text-xs font-medium transition-colors ${verifiedSignals[s.id] === false ? "bg-red-100 text-red-700" : "bg-slate-100 text-slate-600 hover:bg-red-50"}`}><XCircle size={12} className="inline mr-1" />Reject</button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="space-y-6">
-          <div className="bg-white rounded-xl border border-slate-200 p-5">
-            <h3 className="font-semibold text-slate-900 mb-4">Confidence Distribution</h3>
-            <div className="space-y-3">
-              {confidenceData.map(d => (
-                <div key={d.range}>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-medium text-slate-700">{d.range}</span>
-                    <span className="text-sm font-bold text-slate-900">{d.count}</span>
-                  </div>
-                  <div className="w-full bg-slate-100 rounded-full h-2">
-                    <div className="h-full rounded-full" style={{ width: `${(d.count / SIGNALS.length) * 100}%`, background: d.color }}></div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="bg-white rounded-xl border border-slate-200 p-5">
-            <h3 className="font-semibold text-slate-900 mb-4">Signals by Source</h3>
-            <ResponsiveContainer width="100%" height={180}>
-              <PieChart>
-                <Pie data={signalsBySource} cx="50%" cy="50%" innerRadius={40} outerRadius={70} paddingAngle={2} dataKey="value">
-                  {signalsBySource.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
+          <div className="space-y-6">
+            <div className="bg-white rounded-xl border border-slate-200 p-5">
+              <h3 className="font-semibold text-slate-900 mb-4">Confidence Distribution</h3>
+              <div className="space-y-3">
+                {confidenceData.map(d => (
+                  <div key={d.range}>
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-sm font-medium text-slate-700">{d.range}</span>
+                      <span className="text-sm font-bold text-slate-900">{d.count}</span>
+                    </div>
+                    <div className="w-full bg-slate-100 rounded-full h-2">
+                      <div className="h-full rounded-full" style={{ width: `${(d.count / signalEngineData.length) * 100}%`, background: d.color }}></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl border border-slate-200 p-5">
+              <h3 className="font-semibold text-slate-900 mb-4">Signals by Source</h3>
+              <ResponsiveContainer width="100%" height={180}>
+                <PieChart>
+                  <Pie data={signalsBySource} cx="50%" cy="50%" innerRadius={40} outerRadius={70} paddingAngle={2} dataKey="value">
+                    {signalsBySource.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="bg-white rounded-xl border border-slate-200 p-5">
-        <h3 className="font-semibold text-slate-900 mb-4">Signals by Type</h3>
-        <ResponsiveContainer width="100%" height={250}>
-          <BarChart data={signalsByClassification}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-            <XAxis dataKey="name" tick={{ fontSize: 11 }} />
-            <YAxis tick={{ fontSize: 11 }} />
-            <Tooltip />
-            <Bar dataKey="value" fill="#7c3aed" radius={[4, 4, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
+        <div className="bg-white rounded-xl border border-slate-200 p-5 mt-6">
+          <h3 className="font-semibold text-slate-900 mb-4">Signals by Type</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <BarChart data={signalsByClassification}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+              <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+              <YAxis tick={{ fontSize: 11 }} />
+              <Tooltip />
+              <Bar dataKey="value" fill="#7c3aed" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
+      )}
+
+      {activeTab === "ai-scanner" && (
+      <div className="bg-white rounded-xl border border-slate-200 p-5 rounded-t-none border-t-0 space-y-4">
+        {/* Prompt Input Section */}
+        <div className="space-y-3">
+          <label className="block text-sm font-medium text-slate-900">Scan Prompt</label>
+          <textarea value={aiPrompt} onChange={e => setAiPrompt(e.target.value)} placeholder="e.g., Find all CDO/CTO appointments at top 20 pharma companies this week&#10;Scan for Databricks and Snowflake adoption signals in target accounts&#10;Check for GCC expansion news in Hyderabad for pharma companies" className="w-full h-24 p-3 border border-slate-200 rounded-lg text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none" />
+          <button onClick={handleAiScan} disabled={aiScanning || !aiPrompt.trim()} className="px-4 py-2 bg-violet-600 text-white text-sm font-medium rounded-lg hover:bg-violet-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"><BrainCircuit size={14} /> {aiScanning ? "Scanning..." : "Run Scan"}</button>
+        </div>
+
+        {/* Settings Section */}
+        <div className="space-y-3 pb-4 border-b border-slate-200">
+          <h3 className="text-sm font-medium text-slate-900">Settings</h3>
+
+          <div className="space-y-2">
+            <label className="text-xs font-medium text-slate-600">Source Types</label>
+            <div className="flex flex-wrap gap-2">
+              {Object.keys(aiSourceTypes).map(source => (
+                <label key={source} className="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" checked={aiSourceTypes[source]} onChange={e => setAiSourceTypes(prev => ({ ...prev, [source]: e.target.checked }))} className="rounded border-slate-300" />
+                  <span className="text-xs text-slate-600">{source}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-xs font-medium text-slate-600 block mb-1">Date Range</label>
+              <select value={aiDateRange} onChange={e => setAiDateRange(e.target.value)} className="w-full px-2 py-1.5 border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-violet-500">
+                <option>Today</option>
+                <option>This Week</option>
+                <option>This Month</option>
+                <option>Custom</option>
+              </select>
+            </div>
+            <div>
+              <label className="text-xs font-medium text-slate-600 block mb-1">Company Filter</label>
+              <select value={aiCompanyFilter} onChange={e => setAiCompanyFilter(e.target.value)} className="w-full px-2 py-1.5 border border-slate-200 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-violet-500">
+                <option value="all">All Accounts</option>
+                {ACCOUNTS.map(a => <option key={a.id} value={a.name}>{a.name}</option>)}
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="text-xs font-medium text-slate-600 block mb-2">Confidence Threshold: {aiConfidenceThreshold}%</label>
+            <input type="range" min="0" max="100" step="5" value={aiConfidenceThreshold} onChange={e => setAiConfidenceThreshold(parseInt(e.target.value))} className="w-full" />
+          </div>
+        </div>
+
+        {/* Processing State */}
+        {aiScanning && (
+        <div className="text-center py-8">
+          <div className="flex justify-center gap-1 mb-3">
+            <div className="w-2 h-2 bg-violet-500 rounded-full animate-pulse"></div>
+            <div className="w-2 h-2 bg-violet-500 rounded-full animate-pulse" style={{ animationDelay: "0.2s" }}></div>
+            <div className="w-2 h-2 bg-violet-500 rounded-full animate-pulse" style={{ animationDelay: "0.4s" }}></div>
+          </div>
+          <p className="text-sm font-medium text-slate-900">Parsing prompt...</p>
+          <p className="text-xs text-slate-500 mt-1">Configuring scrapers · Scanning sources · Classifying signals</p>
+        </div>
+        )}
+
+        {/* Results Section */}
+        {!aiScanning && aiResults.length > 0 && (
+        <div className="space-y-3">
+          <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-3">
+            <h3 className="text-sm font-medium text-emerald-900">Scan Complete</h3>
+            <div className="grid grid-cols-3 gap-2 mt-2">
+              <div><p className="text-xs text-emerald-600">Signals Found</p><p className="text-lg font-bold text-emerald-900">{aiResults.length}</p></div>
+              <div><p className="text-xs text-emerald-600">Classified</p><p className="text-lg font-bold text-emerald-900">{aiResults.filter(s => s.nlpClassified).length}</p></div>
+              <div><p className="text-xs text-emerald-600">Avg Confidence</p><p className="text-lg font-bold text-emerald-900">{Math.round(aiResults.reduce((sum, s) => sum + s.confidence, 0) / aiResults.length)}%</p></div>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <h3 className="text-sm font-medium text-slate-900">Results</h3>
+            {aiResults.map(s => (
+              <div key={s.id} className="p-3 border border-slate-100 rounded-lg hover:bg-slate-50">
+                <div className="flex items-start gap-3">
+                  <SignalTypeIcon type={s.type} />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-slate-800">{s.detail}</p>
+                    <div className="flex items-center gap-2 mt-1 flex-wrap">
+                      <span className="text-xs text-slate-600">{s.account}</span>
+                      <SourceTypeBadge sourceType={s.sourceType} />
+                      <ConfidenceBadge confidence={s.confidence} />
+                      {s.nlpClassified && <Badge variant="default" className="text-xs">AI Classified</Badge>}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        )}
+
+        {!aiScanning && aiResults.length === 0 && aiPrompt.trim() && (
+        <div className="text-center py-6 text-slate-500">
+          <p className="text-sm">No signals matched your criteria. Try adjusting filters or confidence threshold.</p>
+        </div>
+        )}
+
+        {!aiPrompt.trim() && (
+        <div className="text-center py-8 text-slate-400">
+          <BrainCircuit size={32} className="mx-auto mb-2 opacity-50" />
+          <p className="text-sm">Enter a prompt and click "Run Scan" to find relevant signals</p>
+        </div>
+        )}
+      </div>
+      )}
     </div>
   );
 }
@@ -653,30 +832,41 @@ function ContactsScreen() {
 function SignalsScreen() {
   const [filterType, setFilterType] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
-  const filtered = useMemo(() => SIGNALS.filter(s => {
+  const [signalData, setSignalData] = useState(SIGNALS);
+
+  const filtered = useMemo(() => signalData.filter(s => {
     if (filterType !== "all" && s.type !== filterType) return false;
     if (filterStatus !== "all" && s.status !== filterStatus) return false;
     return true;
-  }), [filterType, filterStatus]);
-  const signalTypes = [...new Set(SIGNALS.map(s => s.type))];
-  const autoDetectedCount = SIGNALS.filter(s => s.nlpClassified).length;
-  const avgConfidence = Math.round(SIGNALS.reduce((sum, s) => sum + s.confidence, 0) / SIGNALS.length);
+  }), [filterType, filterStatus, signalData]);
+
+  const signalTypes = [...new Set(signalData.map(s => s.type))];
+  const autoDetectedCount = signalData.filter(s => s.nlpClassified).length;
+  const avgConfidence = Math.round(signalData.reduce((sum, s) => sum + s.confidence, 0) / signalData.length);
   const scraperCount = SCRAPER_SOURCES.filter(s => s.status === "active").length;
+
+  const handleVerifySignal = (signalId) => {
+    setSignalData(prev => prev.map(s => s.id === signalId ? { ...s, verified: true, status: "hot" } : s));
+  };
+
+  const handleRejectSignal = (signalId) => {
+    setSignalData(prev => prev.map(s => s.id === signalId ? { ...s, verified: false, status: "monitor" } : s));
+  };
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Signal Scanner</h1>
-          <p className="text-sm text-slate-500 mt-1">{scraperCount} scrapers active · {SIGNALS.length} signals today · {avgConfidence}% classifier accuracy</p>
+          <p className="text-sm text-slate-500 mt-1">{scraperCount} scrapers active · {signalData.length} signals today · {avgConfidence}% classifier accuracy</p>
         </div>
         <button className="px-3 py-1.5 bg-violet-600 text-white text-sm rounded-lg hover:bg-violet-700 flex items-center gap-1.5"><Zap size={14} /> Run Full Scan</button>
       </div>
 
       <div className="grid grid-cols-3 gap-4">
-        <MetricCard label="Hot Signals (12+)" value={SIGNALS.filter(s => s.score >= 12).length} icon={AlertTriangle} color="red" sub="Immediate outreach needed" />
-        <MetricCard label="Warm Signals (8-11)" value={SIGNALS.filter(s => s.score >= 8 && s.score < 12).length} icon={TrendingUp} color="amber" sub="Nurture sequence" />
-        <MetricCard label="Monitor (&lt;8)" value={SIGNALS.filter(s => s.score < 8).length} icon={Eye} color="sky" sub="Watch list" />
+        <MetricCard label="Hot Signals (12+)" value={signalData.filter(s => s.score >= 12).length} icon={AlertTriangle} color="red" sub="Immediate outreach needed" />
+        <MetricCard label="Warm Signals (8-11)" value={signalData.filter(s => s.score >= 8 && s.score < 12).length} icon={TrendingUp} color="amber" sub="Nurture sequence" />
+        <MetricCard label="Monitor (&lt;8)" value={signalData.filter(s => s.score < 8).length} icon={Eye} color="sky" sub="Watch list" />
       </div>
 
       <div className="bg-white rounded-xl border border-slate-200 p-4">
@@ -707,6 +897,10 @@ function SignalsScreen() {
                 {s.nlpClassified && <Badge variant="default" className="text-xs">AI Classified</Badge>}
                 <span className="text-xs text-slate-400">{s.date}</span>
               </div>
+            </div>
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <button onClick={() => handleVerifySignal(s.id)} className={`px-2 py-1 rounded text-xs font-medium transition-colors ${s.verified === true ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-600 hover:bg-emerald-50"}`}><CheckCircle size={12} className="inline mr-1" />Verify</button>
+              <button onClick={() => handleRejectSignal(s.id)} className={`px-2 py-1 rounded text-xs font-medium transition-colors ${s.verified === false ? "bg-red-100 text-red-700" : "bg-slate-100 text-slate-600 hover:bg-red-50"}`}><XCircle size={12} className="inline mr-1" />Reject</button>
             </div>
             <div className="text-right flex-shrink-0">
               <ScoreBadge score={s.score} max={15} />
