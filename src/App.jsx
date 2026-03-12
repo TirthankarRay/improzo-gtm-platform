@@ -1,10 +1,6 @@
 import { useState, useMemo, useCallback } from "react";
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, AreaChart, Area, CartesianGrid, Legend } from "recharts";
-import { Search, Bell, Settings, ChevronRight, ChevronDown, Filter, Plus, Send, Target, Zap, Users, Building2, Mail, LayoutDashboard, GitBranch, BookOpen, TrendingUp, Clock, CheckCircle, AlertTriangle, ArrowUpRight, ArrowDownRight, MoreHorizontal, Star, Phone, Linkedin, Video, Eye, Edit3, X, ChevronLeft, Activity, Award, Briefcase, Globe, MapPin, Calendar, MessageSquare, PlayCircle, PauseCircle, BarChart3, CircleDot, UserCheck, FileText } from "lucide-react";
-
-// ═══════════════════════════════════════════
-// REAL DATA FROM IMPROZO GTM-OS
-// ═══════════════════════════════════════════
+import { Search, Bell, Settings, ChevronRight, ChevronDown, Filter, Plus, Send, Target, Zap, Users, Building2, Mail, LayoutDashboard, GitBranch, BookOpen, TrendingUp, Clock, CheckCircle, AlertTriangle, ArrowUpRight, ArrowDownRight, MoreHorizontal, Star, Phone, Linkedin, Video, Eye, Edit3, X, ChevronLeft, Activity, Award, Briefcase, Globe, MapPin, Calendar, MessageSquare, PlayCircle, PauseCircle, BarChart3, CircleDot, UserCheck, FileText, Bot, Cpu, Wifi, WifiOff, RefreshCw, Shield, CheckCircle2, XCircle, ExternalLink, Radar, Database, BrainCircuit } from "lucide-react";
 
 const ACCOUNTS = [
   { id: 1, name: "Novartis", tier: 1, gccLocation: "Hyderabad", headcount: "3,000+", revenue: "$50B+", status: "active", icpScore: 23, owner: "Tirth Ray", stage: "Enrichment", signals: 4, contacts: 12, lastActivity: "2d ago", logo: "N", color: "#0460A9", industry: "Pharma", notes: "Strong GCC presence. Multiple AI/ML initiatives underway." },
@@ -20,18 +16,18 @@ const ACCOUNTS = [
 ];
 
 const SIGNALS = [
-  { id: 1, type: "Job Posting", account: "Sanofi", detail: "Hiring 5x Databricks Engineers for Hyderabad GBS", score: 14, recency: 5, relevance: 5, authority: 4, date: "2026-03-11", status: "hot", weight: "HIGH" },
-  { id: 2, type: "Leadership Change", account: "Novartis", detail: "New VP Data & Analytics appointed for GCC India", score: 13, recency: 4, relevance: 5, authority: 4, date: "2026-03-09", status: "hot", weight: "HIGH" },
-  { id: 3, type: "Technology Signal", account: "Amgen", detail: "Databricks adoption — posting for platform engineers", score: 12, recency: 4, relevance: 4, authority: 4, date: "2026-03-08", status: "hot", weight: "MEDIUM-HIGH" },
-  { id: 4, type: "Job Change", account: "Novartis", detail: "New Director of Commercial Analytics joined from Roche", score: 12, recency: 5, relevance: 4, authority: 3, date: "2026-03-10", status: "hot", weight: "HIGH" },
-  { id: 5, type: "Veeva Migration", account: "Sanofi", detail: "CRM-to-Vault migration RFP expected Q2 2026", score: 11, recency: 3, relevance: 5, authority: 3, date: "2026-03-05", status: "warm", weight: "MEDIUM-HIGH" },
-  { id: 6, type: "GCC Expansion", account: "Sanofi", detail: "New floor lease signed — 200 additional seats in Hyderabad", score: 10, recency: 4, relevance: 3, authority: 3, date: "2026-03-07", status: "warm", weight: "MEDIUM" },
-  { id: 7, type: "Content Engagement", account: "Novartis", detail: "VP Data liked post on Agentic AI in pharma", score: 9, recency: 4, relevance: 3, authority: 2, date: "2026-03-10", status: "warm", weight: "MEDIUM" },
-  { id: 8, type: "Job Posting", account: "Amgen", detail: "Hiring Veeva Technical Architect — Hyderabad", score: 9, recency: 3, relevance: 4, authority: 2, date: "2026-03-06", status: "warm", weight: "HIGH" },
-  { id: 9, type: "Event Attendance", account: "Pfizer", detail: "Commercial IT head registered for NASSCOM GCC Summit", score: 8, recency: 3, relevance: 3, authority: 2, date: "2026-03-04", status: "warm", weight: "MEDIUM" },
-  { id: 10, type: "Technology Signal", account: "AstraZeneca", detail: "Snowflake partnership announcement for India data hub", score: 8, recency: 3, relevance: 3, authority: 2, date: "2026-03-03", status: "warm", weight: "MEDIUM-HIGH" },
-  { id: 11, type: "Job Posting", account: "BMS", detail: "AI/ML Lead — Commercial Analytics, Hyderabad", score: 7, recency: 2, relevance: 3, authority: 2, date: "2026-02-28", status: "monitor", weight: "HIGH" },
-  { id: 12, type: "Content Engagement", account: "Pfizer", detail: "Director SFE engaged with GCC analytics content", score: 6, recency: 3, relevance: 2, authority: 1, date: "2026-03-01", status: "monitor", weight: "MEDIUM" },
+  { id: 1, type: "Job Posting", account: "Sanofi", detail: "Hiring 5x Databricks Engineers for Hyderabad GBS", score: 14, recency: 5, relevance: 5, authority: 4, date: "2026-03-11", status: "hot", weight: "HIGH", sourceUrl: "https://linkedin.com/jobs/123", sourceType: "LinkedIn", confidence: 92, nlpClassified: true, verified: true, autoEnrolled: true },
+  { id: 2, type: "Leadership Change", account: "Novartis", detail: "New VP Data & Analytics appointed for GCC India", score: 13, recency: 4, relevance: 5, authority: 4, date: "2026-03-09", status: "hot", weight: "HIGH", sourceUrl: "https://linkedin.com/feed/456", sourceType: "LinkedIn", confidence: 88, nlpClassified: true, verified: true, autoEnrolled: true },
+  { id: 3, type: "Technology Signal", account: "Amgen", detail: "Databricks adoption — posting for platform engineers", score: 12, recency: 4, relevance: 4, authority: 4, date: "2026-03-08", status: "hot", weight: "MEDIUM-HIGH", sourceUrl: "https://databricks.news/789", sourceType: "Newsroom", confidence: 85, nlpClassified: true, verified: null, autoEnrolled: true },
+  { id: 4, type: "Job Change", account: "Novartis", detail: "New Director of Commercial Analytics joined from Roche", score: 12, recency: 5, relevance: 4, authority: 3, date: "2026-03-10", status: "hot", weight: "HIGH", sourceUrl: "https://linkedin.com/jobs/234", sourceType: "LinkedIn", confidence: 87, nlpClassified: true, verified: true, autoEnrolled: false },
+  { id: 5, type: "Veeva Migration", account: "Sanofi", detail: "CRM-to-Vault migration RFP expected Q2 2026", score: 11, recency: 3, relevance: 5, authority: 3, date: "2026-03-05", status: "warm", weight: "MEDIUM-HIGH", sourceUrl: "https://pharmaexec.com/567", sourceType: "NewsAPI", confidence: 76, nlpClassified: true, verified: false, autoEnrolled: false },
+  { id: 6, type: "GCC Expansion", account: "Sanofi", detail: "New floor lease signed — 200 additional seats in Hyderabad", score: 10, recency: 4, relevance: 3, authority: 3, date: "2026-03-07", status: "warm", weight: "MEDIUM", sourceUrl: "https://hyderabad-business.com/890", sourceType: "NewsAPI", confidence: 72, nlpClassified: false, verified: null, autoEnrolled: false },
+  { id: 7, type: "Content Engagement", account: "Novartis", detail: "VP Data liked post on Agentic AI in pharma", score: 9, recency: 4, relevance: 3, authority: 2, date: "2026-03-10", status: "warm", weight: "MEDIUM", sourceUrl: "https://linkedin.com/posts/111", sourceType: "LinkedIn", confidence: 68, nlpClassified: true, verified: true, autoEnrolled: true },
+  { id: 8, type: "Job Posting", account: "Amgen", detail: "Hiring Veeva Technical Architect — Hyderabad", score: 9, recency: 3, relevance: 4, authority: 2, date: "2026-03-06", status: "warm", weight: "HIGH", sourceUrl: "https://linkedin.com/jobs/222", sourceType: "JobBoard", confidence: 81, nlpClassified: true, verified: true, autoEnrolled: true },
+  { id: 9, type: "Event Attendance", account: "Pfizer", detail: "Commercial IT head registered for NASSCOM GCC Summit", score: 8, recency: 3, relevance: 3, authority: 2, date: "2026-03-04", status: "warm", weight: "MEDIUM", sourceUrl: "https://nasscom-conference.com/333", sourceType: "Conferences", confidence: 74, nlpClassified: false, verified: null, autoEnrolled: false },
+  { id: 10, type: "Technology Signal", account: "AstraZeneca", detail: "Snowflake partnership announcement for India data hub", score: 8, recency: 3, relevance: 3, authority: 2, date: "2026-03-03", status: "warm", weight: "MEDIUM-HIGH", sourceUrl: "https://snowflake.com/news/444", sourceType: "Newsroom", confidence: 79, nlpClassified: true, verified: null, autoEnrolled: true },
+  { id: 11, type: "Job Posting", account: "BMS", detail: "AI/ML Lead — Commercial Analytics, Hyderabad", score: 7, recency: 2, relevance: 3, authority: 2, date: "2026-02-28", status: "monitor", weight: "HIGH", sourceUrl: "https://jobs.bms.com/555", sourceType: "JobBoard", confidence: 65, nlpClassified: false, verified: null, autoEnrolled: false },
+  { id: 12, type: "Content Engagement", account: "Pfizer", detail: "Director SFE engaged with GCC analytics content", score: 6, recency: 3, relevance: 2, authority: 1, date: "2026-03-01", status: "monitor", weight: "MEDIUM", sourceUrl: "https://linkedin.com/posts/666", sourceType: "LinkedIn", confidence: 58, nlpClassified: true, verified: true, autoEnrolled: false },
 ];
 
 const CONTACTS = [
@@ -95,42 +91,62 @@ const DASHBOARD_METRICS = {
 };
 
 const ACTIVITY_FEED = [
-  { time: "2h ago", type: "signal", text: "New signal: Sanofi hiring 5x Databricks Engineers", icon: "zap" },
+  { time: "2h ago", type: "signal", text: "Auto-detected: Sanofi hiring 5x Databricks Engineers", icon: "zap" },
   { time: "3h ago", type: "email", text: "Email sent to Amit Patel (Sanofi) — Day 4 follow-up", icon: "mail" },
-  { time: "1d ago", type: "signal", text: "Novartis VP Data liked Agentic AI post on LinkedIn", icon: "zap" },
+  { time: "1d ago", type: "signal", text: "Auto-detected: Novartis VP Data liked Agentic AI post on LinkedIn", icon: "zap" },
   { time: "1d ago", type: "sequence", text: "Priya Sharma (Novartis) entered Tier 1 sequence", icon: "play" },
   { time: "2d ago", type: "enrichment", text: "12 new contacts enriched for Novartis via Apollo", icon: "users" },
-  { time: "2d ago", type: "signal", text: "New signal: Novartis — New VP Data & Analytics appointed", icon: "zap" },
+  { time: "2d ago", type: "signal", text: "Auto-detected: Novartis — New VP Data & Analytics appointed", icon: "zap" },
   { time: "3d ago", type: "email", text: "Email sent to Rajesh Kumar (Novartis) — Day 1 intro", icon: "mail" },
   { time: "3d ago", type: "enrichment", text: "6 contacts enriched for Amgen — 4 verified", icon: "users" },
   { time: "5d ago", type: "sequence", text: "Suresh Reddy (Pfizer) entered Tier 1 sequence", icon: "play" },
-  { time: "1w ago", type: "signal", text: "AstraZeneca Snowflake partnership for India data hub", icon: "zap" },
+  { time: "1w ago", type: "signal", text: "Auto-detected: AstraZeneca Snowflake partnership for India data hub", icon: "zap" },
 ];
 
-// ═══════════════════════════════════════════
-// UTILITY COMPONENTS
-// ═══════════════════════════════════════════
+const SCRAPER_SOURCES = [
+  { id: 1, name: "LinkedIn Jobs", type: "JobBoard", status: "active", lastRun: "2h ago", itemsCollected: 156, frequency: "hourly", health: 99 },
+  { id: 2, name: "LinkedIn Posts", type: "LinkedIn", status: "active", lastRun: "1h ago", itemsCollected: 89, frequency: "hourly", health: 98 },
+  { id: 3, name: "Databricks Newsroom", type: "Newsroom", status: "active", lastRun: "3h ago", itemsCollected: 12, frequency: "6-hourly", health: 100 },
+  { id: 4, name: "Snowflake Newsroom", type: "Newsroom", status: "active", lastRun: "4h ago", itemsCollected: 8, frequency: "6-hourly", health: 100 },
+  { id: 5, name: "Veeva Newsroom", type: "Newsroom", status: "active", lastRun: "5h ago", itemsCollected: 6, frequency: "6-hourly", health: 100 },
+  { id: 6, name: "Pharma Industry News", type: "NewsAPI", status: "active", lastRun: "30m ago", itemsCollected: 234, frequency: "hourly", health: 97 },
+  { id: 7, name: "Tech & GCC News", type: "NewsAPI", status: "active", lastRun: "45m ago", itemsCollected: 178, frequency: "hourly", health: 96 },
+  { id: 8, name: "CrunchBase API", type: "NewsAPI", status: "active", lastRun: "1h ago", itemsCollected: 23, frequency: "daily", health: 99 },
+  { id: 9, name: "Regulatory Filings", type: "Regulatory", status: "active", lastRun: "2h ago", itemsCollected: 3, frequency: "daily", health: 100 },
+  { id: 10, name: "Glassdoor Jobs", type: "JobBoard", status: "warning", lastRun: "6h ago", itemsCollected: 45, frequency: "12-hourly", health: 72 },
+  { id: 11, name: "Indeed Jobs", type: "JobBoard", status: "active", lastRun: "2h ago", itemsCollected: 67, frequency: "hourly", health: 94 },
+  { id: 12, name: "ZoomInfo Updates", type: "LinkedIn", status: "active", lastRun: "3h ago", itemsCollected: 34, frequency: "6-hourly", health: 95 },
+  { id: 13, name: "Conference Registrations", type: "Conferences", status: "active", lastRun: "1d ago", itemsCollected: 5, frequency: "daily", health: 100 },
+  { id: 14, name: "PR Wire Services", type: "PRWire", status: "active", lastRun: "2h ago", itemsCollected: 41, frequency: "6-hourly", health: 98 },
+  { id: 15, name: "Executive Move Tracker", type: "LinkedIn", status: "active", lastRun: "4h ago", itemsCollected: 19, frequency: "daily", health: 99 },
+];
+
+const SIGNAL_ENGINE_METRICS = {
+  scraperUptime: 98.7,
+  signalsToday: 47,
+  signalsThisWeek: 287,
+  avgConfidence: 79,
+  classifierAccuracy: 89,
+  processingTime: "2.3s",
+};
+
+const SIGNAL_VELOCITY = [
+  { company: "Novartis", week1: 5, week2: 7, week3: 4, week4: 8 },
+  { company: "Sanofi", week1: 6, week2: 8, week3: 6, week4: 9 },
+  { company: "Amgen", week1: 3, week2: 5, week3: 4, week4: 7 },
+  { company: "Pfizer", week1: 2, week2: 4, week3: 3, week4: 5 },
+  { company: "AstraZeneca", week1: 1, week2: 3, week3: 2, week4: 4 },
+];
 
 const Badge = ({ children, variant = "default", className = "" }) => {
   const variants = {
-    default: "bg-slate-100 text-slate-700",
-    hot: "bg-red-50 text-red-700 border border-red-200",
-    warm: "bg-amber-50 text-amber-700 border border-amber-200",
-    cool: "bg-blue-50 text-blue-700 border border-blue-200",
-    monitor: "bg-slate-50 text-slate-600 border border-slate-200",
-    success: "bg-emerald-50 text-emerald-700 border border-emerald-200",
-    tier1: "bg-violet-50 text-violet-700 border border-violet-200",
-    tier2: "bg-sky-50 text-sky-700 border border-sky-200",
-    tier3: "bg-slate-50 text-slate-600 border border-slate-200",
-    active: "bg-emerald-50 text-emerald-700 border border-emerald-200",
-    draft: "bg-slate-50 text-slate-500 border border-slate-200",
-    paused: "bg-amber-50 text-amber-600 border border-amber-200",
+    default: "bg-slate-100 text-slate-700", hot: "bg-red-50 text-red-700 border border-red-200", warm: "bg-amber-50 text-amber-700 border border-amber-200", cool: "bg-blue-50 text-blue-700 border border-blue-200", monitor: "bg-slate-50 text-slate-600 border border-slate-200", success: "bg-emerald-50 text-emerald-700 border border-emerald-200", tier1: "bg-violet-50 text-violet-700 border border-violet-200", tier2: "bg-sky-50 text-sky-700 border border-sky-200", tier3: "bg-slate-50 text-slate-600 border border-slate-200", active: "bg-emerald-50 text-emerald-700 border border-emerald-200", draft: "bg-slate-50 text-slate-500 border border-slate-200", paused: "bg-amber-50 text-amber-600 border border-amber-200", newsroom: "bg-blue-50 text-blue-700", linkedin: "bg-violet-50 text-violet-700", jobboard: "bg-emerald-50 text-emerald-700", newsapi: "bg-indigo-50 text-indigo-700", conferences: "bg-pink-50 text-pink-700", regulatory: "bg-orange-50 text-orange-700",
   };
   return <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${variants[variant] || variants.default} ${className}`}>{children}</span>;
 };
 
 const MetricCard = ({ label, value, sub, icon: Icon, trend, trendDir, color = "violet" }) => {
-  const colors = { violet: "from-violet-500 to-violet-600", sky: "from-sky-500 to-sky-600", emerald: "from-emerald-500 to-emerald-600", amber: "from-amber-500 to-amber-600", red: "from-red-500 to-red-600", indigo: "from-indigo-500 to-indigo-600" };
+  const colors = { violet: "from-violet-500 to-violet-600", sky: "from-sky-500 to-sky-600", emerald: "from-emerald-500 to-emerald-600", amber: "from-amber-500 to-amber-600", red: "from-red-500 to-red-600", indigo: "from-indigo-500 to-indigo-600", green: "from-green-500 to-green-600" };
   return (
     <div className="bg-white rounded-xl border border-slate-200 p-5 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between">
@@ -159,14 +175,11 @@ const ScoreBadge = ({ score, max = 25 }) => {
   return <span className={`inline-flex items-center justify-center w-9 h-9 rounded-lg border text-sm font-bold ${color}`}>{score}</span>;
 };
 
-const ChannelIcon = ({ channel, size = 14 }) => {
-  switch (channel) {
-    case "Email": return <Mail size={size} />;
-    case "LinkedIn": return <Linkedin size={size} />;
-    case "Phone": return <Phone size={size} />;
-    case "Video": return <Video size={size} />;
-    default: return <MessageSquare size={size} />;
-  }
+const ConfidenceBadge = ({ confidence }) => {
+  let color = "text-red-600 bg-red-50 border-red-200";
+  if (confidence >= 80) color = "text-emerald-600 bg-emerald-50 border-emerald-200";
+  else if (confidence >= 70) color = "text-amber-600 bg-amber-50 border-amber-200";
+  return <span className={`inline-flex items-center justify-center w-12 h-8 rounded-lg border text-xs font-bold ${color}`}>{confidence}%</span>;
 };
 
 const SignalTypeIcon = ({ type }) => {
@@ -174,9 +187,10 @@ const SignalTypeIcon = ({ type }) => {
   return <span className={`inline-flex items-center justify-center w-8 h-8 rounded-lg text-xs ${map[type] || "bg-slate-100 text-slate-600"}`}><Zap size={14} /></span>;
 };
 
-// ═══════════════════════════════════════════
-// SCREEN: DASHBOARD
-// ═══════════════════════════════════════════
+const SourceTypeBadge = ({ sourceType }) => {
+  const map = { "Newsroom": "newsroom", "LinkedIn": "linkedin", "JobBoard": "jobboard", "NewsAPI": "newsapi", "Conferences": "conferences", "Regulatory": "regulatory", "PRWire": "regulatory", };
+  return <Badge variant={map[sourceType] || "default"} className="text-xs">{sourceType}</Badge>;
+};
 
 const DashboardScreen = ({ setActiveScreen, setSelectedAccount }) => {
   const signalsByType = useMemo(() => {
@@ -184,43 +198,32 @@ const DashboardScreen = ({ setActiveScreen, setSelectedAccount }) => {
     SIGNALS.forEach(s => { counts[s.type] = (counts[s.type] || 0) + 1; });
     return Object.entries(counts).map(([name, value]) => ({ name: name.length > 15 ? name.slice(0, 14) + "..." : name, value }));
   }, []);
-
-  const pipelineChart = useMemo(() => PIPELINE_STAGES.map(s => ({ name: s.name.length > 8 ? s.name.slice(0, 7) + "..." : s.name, count: s.deals.length })), []);
-
-  const weeklyActivity = [
-    { day: "Mon", emails: 4, signals: 2, enriched: 6 },
-    { day: "Tue", emails: 6, signals: 1, enriched: 12 },
-    { day: "Wed", emails: 3, signals: 3, enriched: 4 },
-    { day: "Thu", emails: 8, signals: 4, enriched: 8 },
-    { day: "Fri", emails: 3, signals: 2, enriched: 8 },
-  ];
-
+  const weeklyActivity = [ { day: "Mon", emails: 4, signals: 2, enriched: 6 }, { day: "Tue", emails: 6, signals: 1, enriched: 12 }, { day: "Wed", emails: 3, signals: 3, enriched: 4 }, { day: "Thu", emails: 8, signals: 4, enriched: 8 }, { day: "Fri", emails: 3, signals: 2, enriched: 8 }, ];
   const COLORS = ["#7c3aed", "#0ea5e9", "#f59e0b", "#10b981", "#ef4444", "#6366f1", "#ec4899", "#14b8a6"];
-
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">GTM Command Center</h1>
-          <p className="text-sm text-slate-500 mt-1">Improzo Pipeline & Outreach Hub — Phase v1.0</p>
+          <p className="text-sm text-slate-500 mt-1">Phase v2.0 — Automated Signal Intelligence</p>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-xs text-slate-400">Last sync: 2h ago</span>
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-lg">
+            <Wifi size={14} className="text-emerald-600" />
+            <span className="text-xs font-medium text-emerald-700">Signal Engine: ACTIVE</span>
+          </div>
           <button className="px-3 py-1.5 bg-violet-600 text-white text-sm rounded-lg hover:bg-violet-700 flex items-center gap-1.5"><Zap size={14} /> Run Signal Scan</button>
         </div>
       </div>
-
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         <MetricCard label="Target Accounts" value={DASHBOARD_METRICS.totalAccounts} sub={`${DASHBOARD_METRICS.tier1} Tier 1 · ${DASHBOARD_METRICS.tier2} Tier 2`} icon={Building2} color="violet" />
         <MetricCard label="Contacts" value={DASHBOARD_METRICS.totalContacts} sub={`${DASHBOARD_METRICS.verified} verified`} icon={Users} color="sky" trend="+12 this week" trendDir="up" />
-        <MetricCard label="Active Signals" value={DASHBOARD_METRICS.activeSignals} sub={`${DASHBOARD_METRICS.hotSignals} hot · ${DASHBOARD_METRICS.warmSignals} warm`} icon={Zap} color="amber" trend="+4 new" trendDir="up" />
-        <MetricCard label="In Sequences" value={DASHBOARD_METRICS.sequencesActive} sub={`${DASHBOARD_METRICS.emailsSent} emails sent`} icon={Send} color="emerald" />
+        <MetricCard label="Signals Today" value={SIGNAL_ENGINE_METRICS.signalsToday} sub="Auto-detected" icon={Radar} color="green" trend={`${SIGNAL_ENGINE_METRICS.signalsThisWeek}/week`} trendDir="up" />
+        <MetricCard label="Engine Health" value={`${SIGNAL_ENGINE_METRICS.scraperUptime}%`} sub="Scraper uptime" icon={Cpu} color="emerald" />
         <MetricCard label="Responses" value={DASHBOARD_METRICS.responses} sub="12.5% reply rate" icon={MessageSquare} color="indigo" trend="+1 today" trendDir="up" />
         <MetricCard label="Pipeline Value" value={DASHBOARD_METRICS.pipelineValue} sub="8 active deals" icon={Target} color="red" />
       </div>
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Hot Signals */}
         <div className="bg-white rounded-xl border border-slate-200 p-5 lg:col-span-1">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold text-slate-900 flex items-center gap-2"><Zap size={16} className="text-amber-500" /> Hot Signals</h3>
@@ -232,40 +235,25 @@ const DashboardScreen = ({ setActiveScreen, setSelectedAccount }) => {
                 <SignalTypeIcon type={s.type} />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-slate-800 truncate">{s.detail}</p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs text-slate-500">{s.account}</span>
-                    <span className="text-xs text-slate-300">·</span>
-                    <span className="text-xs text-slate-400">{s.date}</span>
-                  </div>
+                  <div className="flex items-center gap-2 mt-1"><span className="text-xs text-slate-500">{s.account}</span><span className="text-xs text-slate-300">·</span><span className="text-xs text-slate-400">{s.date}</span></div>
                 </div>
                 <ScoreBadge score={s.score} max={15} />
               </div>
             ))}
           </div>
         </div>
-
-        {/* Weekly Activity Chart */}
         <div className="bg-white rounded-xl border border-slate-200 p-5 lg:col-span-1">
           <h3 className="font-semibold text-slate-900 mb-4 flex items-center gap-2"><Activity size={16} className="text-violet-500" /> Weekly Activity</h3>
           <ResponsiveContainer width="100%" height={200}>
             <AreaChart data={weeklyActivity}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis dataKey="day" tick={{ fontSize: 11, fill: "#94a3b8" }} />
-              <YAxis tick={{ fontSize: 11, fill: "#94a3b8" }} />
-              <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e2e8f0", boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.05)" }} />
-              <Area type="monotone" dataKey="emails" stroke="#7c3aed" fill="#7c3aed" fillOpacity={0.15} strokeWidth={2} />
-              <Area type="monotone" dataKey="signals" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.1} strokeWidth={2} />
-              <Area type="monotone" dataKey="enriched" stroke="#0ea5e9" fill="#0ea5e9" fillOpacity={0.1} strokeWidth={2} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" /><XAxis dataKey="day" tick={{ fontSize: 11, fill: "#94a3b8" }} /><YAxis tick={{ fontSize: 11, fill: "#94a3b8" }} /><Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e2e8f0", boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.05)" }} />
+              <Area type="monotone" dataKey="emails" stroke="#7c3aed" fill="#7c3aed" fillOpacity={0.15} strokeWidth={2} /><Area type="monotone" dataKey="signals" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.1} strokeWidth={2} /><Area type="monotone" dataKey="enriched" stroke="#0ea5e9" fill="#0ea5e9" fillOpacity={0.1} strokeWidth={2} />
             </AreaChart>
           </ResponsiveContainer>
           <div className="flex items-center justify-center gap-4 mt-2">
-            <span className="flex items-center gap-1 text-xs text-slate-500"><span className="w-2 h-2 rounded-full bg-violet-500" />Emails</span>
-            <span className="flex items-center gap-1 text-xs text-slate-500"><span className="w-2 h-2 rounded-full bg-amber-500" />Signals</span>
-            <span className="flex items-center gap-1 text-xs text-slate-500"><span className="w-2 h-2 rounded-full bg-sky-500" />Enriched</span>
+            <span className="flex items-center gap-1 text-xs text-slate-500"><span className="w-2 h-2 rounded-full bg-violet-500" />Emails</span><span className="flex items-center gap-1 text-xs text-slate-500"><span className="w-2 h-2 rounded-full bg-amber-500" />Signals</span><span className="flex items-center gap-1 text-xs text-slate-500"><span className="w-2 h-2 rounded-full bg-sky-500" />Enriched</span>
           </div>
         </div>
-
-        {/* Signal Distribution */}
         <div className="bg-white rounded-xl border border-slate-200 p-5 lg:col-span-1">
           <h3 className="font-semibold text-slate-900 mb-4 flex items-center gap-2"><CircleDot size={16} className="text-emerald-500" /> Signal Distribution</h3>
           <ResponsiveContainer width="100%" height={200}>
@@ -276,15 +264,9 @@ const DashboardScreen = ({ setActiveScreen, setSelectedAccount }) => {
               <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e2e8f0" }} />
             </PieChart>
           </ResponsiveContainer>
-          <div className="flex flex-wrap gap-2 justify-center mt-2">
-            {signalsByType.map((s, i) => (
-              <span key={s.name} className="flex items-center gap-1 text-xs text-slate-500"><span className="w-2 h-2 rounded-full" style={{ background: COLORS[i % COLORS.length] }} />{s.name}</span>
-            ))}
-          </div>
+          <div className="flex flex-wrap gap-2 justify-center mt-2">{signalsByType.map((s, i) => (<span key={s.name} className="flex items-center gap-1 text-xs text-slate-500"><span className="w-2 h-2 rounded-full" style={{ background: COLORS[i % COLORS.length] }} />{s.name}</span>))}</div>
         </div>
       </div>
-
-      {/* Activity Feed + Top Accounts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white rounded-xl border border-slate-200 p-5">
           <h3 className="font-semibold text-slate-900 mb-4 flex items-center gap-2"><Clock size={16} className="text-slate-400" /> Recent Activity</h3>
@@ -294,31 +276,21 @@ const DashboardScreen = ({ setActiveScreen, setSelectedAccount }) => {
                 <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${a.type === "signal" ? "bg-amber-100 text-amber-600" : a.type === "email" ? "bg-violet-100 text-violet-600" : a.type === "sequence" ? "bg-emerald-100 text-emerald-600" : "bg-sky-100 text-sky-600"}`}>
                   {a.type === "signal" ? <Zap size={12} /> : a.type === "email" ? <Mail size={12} /> : a.type === "sequence" ? <PlayCircle size={12} /> : <Users size={12} />}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm text-slate-700">{a.text}</p>
-                  <p className="text-xs text-slate-400 mt-0.5">{a.time}</p>
-                </div>
+                <div className="flex-1 min-w-0"><p className="text-sm text-slate-700">{a.text}</p><p className="text-xs text-slate-400 mt-0.5">{a.time}</p></div>
               </div>
             ))}
           </div>
         </div>
-
         <div className="bg-white rounded-xl border border-slate-200 p-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-slate-900 flex items-center gap-2"><Building2 size={16} className="text-violet-500" /> Top Accounts by Signal Score</h3>
+            <h3 className="font-semibold text-slate-900 flex items-center gap-2"><Building2 size={16} className="text-violet-500" /> Top Accounts</h3>
             <button onClick={() => setActiveScreen("accounts")} className="text-xs text-violet-600 hover:text-violet-700 font-medium">View all</button>
           </div>
           <div className="space-y-2">
             {ACCOUNTS.slice(0, 6).map(a => (
               <div key={a.id} onClick={() => { setSelectedAccount(a); setActiveScreen("account-detail"); }} className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 cursor-pointer border border-transparent hover:border-slate-200 transition-all">
                 <div className="w-9 h-9 rounded-lg flex items-center justify-center text-white font-bold text-sm" style={{ background: a.color }}>{a.logo}</div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-slate-800">{a.name}</span>
-                    <Badge variant={`tier${a.tier}`}>T{a.tier}</Badge>
-                  </div>
-                  <p className="text-xs text-slate-500">{a.signals} signals · {a.contacts} contacts · {a.stage}</p>
-                </div>
+                <div className="flex-1 min-w-0"><div className="flex items-center gap-2"><span className="text-sm font-medium text-slate-800">{a.name}</span><Badge variant={`tier${a.tier}`}>T{a.tier}</Badge></div><p className="text-xs text-slate-500">{a.signals} signals · {a.contacts} contacts · {a.stage}</p></div>
                 <ScoreBadge score={a.icpScore} />
               </div>
             ))}
@@ -329,22 +301,17 @@ const DashboardScreen = ({ setActiveScreen, setSelectedAccount }) => {
   );
 };
 
-// ═══════════════════════════════════════════
-// SCREEN: ACCOUNTS
-// ═══════════════════════════════════════════
-
 const AccountsScreen = ({ setActiveScreen, setSelectedAccount }) => {
   const [filterTier, setFilterTier] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
-
   const filtered = useMemo(() => ACCOUNTS.filter(a => {
     if (filterTier !== "all" && a.tier !== parseInt(filterTier)) return false;
     if (filterStatus !== "all" && a.status !== filterStatus) return false;
     if (searchTerm && !a.name.toLowerCase().includes(searchTerm.toLowerCase())) return false;
     return true;
   }), [filterTier, filterStatus, searchTerm]);
-
+  const getScraperStatus = (accountId) => { const statuses = ["active", "warning", "error"]; return statuses[accountId % 3]; };
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -354,64 +321,62 @@ const AccountsScreen = ({ setActiveScreen, setSelectedAccount }) => {
         </div>
         <button className="px-3 py-1.5 bg-violet-600 text-white text-sm rounded-lg hover:bg-violet-700 flex items-center gap-1.5"><Plus size={14} /> Add Account</button>
       </div>
-
       <div className="bg-white rounded-xl border border-slate-200 p-4">
         <div className="flex items-center gap-3 flex-wrap">
-          <div className="relative flex-1 min-w-[200px]">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input type="text" placeholder="Search accounts..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="w-full pl-9 pr-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent" />
-          </div>
-          <select value={filterTier} onChange={e => setFilterTier(e.target.value)} className="px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-600 focus:outline-none focus:ring-2 focus:ring-violet-500">
-            <option value="all">All Tiers</option>
-            <option value="1">Tier 1</option>
-            <option value="2">Tier 2</option>
-          </select>
-          <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} className="px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-600 focus:outline-none focus:ring-2 focus:ring-violet-500">
-            <option value="all">All Statuses</option>
-            <option value="active">Active</option>
-            <option value="cooling">Cooling</option>
-            <option value="monitoring">Monitoring</option>
-          </select>
+          <div className="relative flex-1 min-w-[200px]"><Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" /><input type="text" placeholder="Search accounts..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="w-full pl-9 pr-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent" /></div>
+          <select value={filterTier} onChange={e => setFilterTier(e.target.value)} className="px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-600 focus:outline-none focus:ring-2 focus:ring-violet-500"><option value="all">All Tiers</option><option value="1">Tier 1</option><option value="2">Tier 2</option></select>
+          <select value={filterStatus} onChange={e => setFilterStatus(e.target.value)} className="px-3 py-2 border border-slate-200 rounded-lg text-sm text-slate-600 focus:outline-none focus:ring-2 focus:ring-violet-500"><option value="all">All Statuses</option><option value="active">Active</option><option value="cooling">Cooling</option><option value="monitoring">Monitoring</option></select>
         </div>
       </div>
-
       <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
         <table className="w-full">
-          <thead>
-            <tr className="border-b border-slate-100 bg-slate-50/50">
-              <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Account</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Tier</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">ICP Score</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Stage</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Signals</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Contacts</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Owner</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Last Activity</th>
-              <th className="px-4 py-3"></th>
-            </tr>
-          </thead>
+          <thead><tr className="border-b border-slate-100 bg-slate-50/50">
+            <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Account</th>
+            <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Tier</th>
+            <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">ICP Score</th>
+            <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Stage</th>
+            <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Signals</th>
+            <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Signal Velocity</th>
+            <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Contacts</th>
+            <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Owner</th>
+            <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Last Activity</th>
+            <th className="px-4 py-3"></th>
+          </tr></thead>
           <tbody>
-            {filtered.map(a => (
-              <tr key={a.id} onClick={() => { setSelectedAccount(a); setActiveScreen("account-detail"); }} className="border-b border-slate-50 hover:bg-violet-50/30 cursor-pointer transition-colors">
-                <td className="px-5 py-3.5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-xs" style={{ background: a.color }}>{a.logo}</div>
-                    <div>
-                      <p className="text-sm font-medium text-slate-800">{a.name}</p>
-                      <p className="text-xs text-slate-400">{a.gccLocation} · {a.headcount}</p>
+            {filtered.map(a => {
+              const velocity = SIGNAL_VELOCITY.find(v => v.company === a.name);
+              const scraperStatus = getScraperStatus(a.id);
+              return (
+                <tr key={a.id} onClick={() => { setSelectedAccount(a); setActiveScreen("account-detail"); }} className="border-b border-slate-50 hover:bg-violet-50/30 cursor-pointer transition-colors">
+                  <td className="px-5 py-3.5">
+                    <div className="flex items-center gap-3">
+                      <div className="relative">
+                        <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-xs" style={{ background: a.color }}>{a.logo}</div>
+                        <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border border-white ${scraperStatus === "active" ? "bg-emerald-500" : scraperStatus === "warning" ? "bg-amber-500" : "bg-red-500"}`} title={`Scraper: ${scraperStatus}`}></div>
+                      </div>
+                      <div><p className="text-sm font-medium text-slate-800">{a.name}</p><p className="text-xs text-slate-400">{a.gccLocation} · {a.headcount}</p></div>
                     </div>
-                  </div>
-                </td>
-                <td className="px-4 py-3.5"><Badge variant={`tier${a.tier}`}>Tier {a.tier}</Badge></td>
-                <td className="px-4 py-3.5"><ScoreBadge score={a.icpScore} /></td>
-                <td className="px-4 py-3.5"><span className="text-sm text-slate-600">{a.stage}</span></td>
-                <td className="px-4 py-3.5"><span className="text-sm font-medium text-slate-700">{a.signals}</span></td>
-                <td className="px-4 py-3.5"><span className="text-sm text-slate-600">{a.contacts}</span></td>
-                <td className="px-4 py-3.5"><span className="text-xs text-slate-500">{a.owner}</span></td>
-                <td className="px-4 py-3.5"><span className="text-xs text-slate-400">{a.lastActivity}</span></td>
-                <td className="px-4 py-3.5"><ChevronRight size={16} className="text-slate-300" /></td>
-              </tr>
-            ))}
+                  </td>
+                  <td className="px-4 py-3.5"><Badge variant={`tier${a.tier}`}>Tier {a.tier}</Badge></td>
+                  <td className="px-4 py-3.5"><ScoreBadge score={a.icpScore} /></td>
+                  <td className="px-4 py-3.5"><span className="text-sm text-slate-600">{a.stage}</span></td>
+                  <td className="px-4 py-3.5"><span className="text-sm font-medium text-slate-700">{a.signals}</span></td>
+                  <td className="px-4 py-3.5">
+                    {velocity && (
+                      <div className="flex gap-1 items-end h-6">
+                        {[velocity.week1, velocity.week2, velocity.week3, velocity.week4].map((v, i) => (
+                          <div key={i} className="flex-1 bg-gradient-to-t from-violet-500 to-violet-300 rounded-sm" style={{ height: `${(v / 9) * 100}%`, minHeight: "2px" }} title={`Week ${i+1}: ${v} signals`}></div>
+                        ))}
+                      </div>
+                    )}
+                  </td>
+                  <td className="px-4 py-3.5"><span className="text-sm text-slate-600">{a.contacts}</span></td>
+                  <td className="px-4 py-3.5"><span className="text-xs text-slate-500">{a.owner}</span></td>
+                  <td className="px-4 py-3.5"><span className="text-xs text-slate-400">{a.lastActivity}</span></td>
+                  <td className="px-4 py-3.5"><ChevronRight size={16} className="text-slate-300" /></td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
@@ -419,306 +384,212 @@ const AccountsScreen = ({ setActiveScreen, setSelectedAccount }) => {
   );
 };
 
-// ═══════════════════════════════════════════
-// SCREEN: ACCOUNT DETAIL
-// ═══════════════════════════════════════════
+function SignalEngineScreen() {
+  const [verifiedSignals, setVerifiedSignals] = useState({});
+  
+  const signalsBySource = useMemo(() => {
+    const grouped = {};
+    SIGNALS.forEach(s => {
+      grouped[s.sourceType] = (grouped[s.sourceType] || 0) + 1;
+    });
+    return Object.entries(grouped).map(([type, count]) => ({ name: type, value: count }));
+  }, []);
 
-const AccountDetailScreen = ({ account, setActiveScreen }) => {
-  const [activeTab, setActiveTab] = useState("overview");
-  if (!account) return null;
-  const accountSignals = SIGNALS.filter(s => s.account === account.name);
-  const accountContacts = CONTACTS.filter(c => c.account === account.name);
+  const signalsByClassification = useMemo(() => {
+    const grouped = {};
+    SIGNALS.forEach(s => {
+      grouped[s.type] = (grouped[s.type] || 0) + 1;
+    });
+    return Object.entries(grouped).map(([type, count]) => ({ name: type.length > 12 ? type.slice(0, 11) + "..." : type, value: count }));
+  }, []);
+
+  const confidenceData = [
+    { range: "80-100%", count: SIGNALS.filter(s => s.confidence >= 80).length, color: "#10b981" },
+    { range: "60-79%", count: SIGNALS.filter(s => s.confidence >= 60 && s.confidence < 80).length, color: "#f59e0b" },
+    { range: "&lt;60lt;60%", count: SIGNALS.filter(s => s.confidence < 60).length, color: "#ef4444" },
+  ];
+
+  const COLORS = ["#7c3aed", "#0ea5e9", "#f59e0b", "#10b981", "#ef4444", "#6366f1"];
+
+  const toggleVerify = (signalId, status) => {
+    setVerifiedSignals(prev => ({ ...prev, [signalId]: status }));
+  };
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <button onClick={() => setActiveScreen("accounts")} className="p-1.5 rounded-lg hover:bg-slate-100"><ChevronLeft size={18} className="text-slate-500" /></button>
-        <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg" style={{ background: account.color }}>{account.logo}</div>
-        <div className="flex-1">
-          <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold text-slate-900">{account.name}</h1>
-            <Badge variant={`tier${account.tier}`}>Tier {account.tier}</Badge>
-            <Badge variant={account.status === "active" ? "success" : account.status === "cooling" ? "paused" : "default"}>{account.status}</Badge>
-          </div>
-          <p className="text-sm text-slate-500">{account.industry} · {account.gccLocation} · {account.headcount} headcount · {account.revenue} revenue</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">Signal Engine Dashboard</h1>
+          <p className="text-sm text-slate-500 mt-1">Automated scraping infrastructure & signal processing</p>
         </div>
-        <ScoreBadge score={account.icpScore} />
+        <button className="px-3 py-1.5 bg-violet-600 text-white text-sm rounded-lg hover:bg-violet-700 flex items-center gap-1.5"><RefreshCw size={14} /> Refresh Status</button>
       </div>
 
-      <div className="flex gap-1 border-b border-slate-200 pb-0">
-        {["overview", "contacts", "signals", "sequences", "notes"].map(tab => (
-          <button key={tab} onClick={() => setActiveTab(tab)} className={`px-4 py-2 text-sm font-medium capitalize rounded-t-lg transition-colors ${activeTab === tab ? "text-violet-700 bg-violet-50 border-b-2 border-violet-600" : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"}`}>{tab}</button>
-        ))}
-      </div>
-
-      {activeTab === "overview" && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 space-y-6">
-            <div className="bg-white rounded-xl border border-slate-200 p-5">
-              <h3 className="font-semibold text-slate-900 mb-3">Account Intelligence</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">{account.notes}</p>
-              <div className="grid grid-cols-2 gap-4 mt-4">
-                <div className="p-3 bg-slate-50 rounded-lg"><p className="text-xs text-slate-500">Stage</p><p className="text-sm font-medium text-slate-800 mt-1">{account.stage}</p></div>
-                <div className="p-3 bg-slate-50 rounded-lg"><p className="text-xs text-slate-500">Owner</p><p className="text-sm font-medium text-slate-800 mt-1">{account.owner}</p></div>
-                <div className="p-3 bg-slate-50 rounded-lg"><p className="text-xs text-slate-500">Active Signals</p><p className="text-sm font-medium text-slate-800 mt-1">{accountSignals.length}</p></div>
-                <div className="p-3 bg-slate-50 rounded-lg"><p className="text-xs text-slate-500">Contacts Mapped</p><p className="text-sm font-medium text-slate-800 mt-1">{accountContacts.length}</p></div>
-              </div>
-            </div>
-            <div className="bg-white rounded-xl border border-slate-200 p-5">
-              <h3 className="font-semibold text-slate-900 mb-3">Recent Signals</h3>
-              {accountSignals.length === 0 ? <p className="text-sm text-slate-400">No signals detected yet.</p> : (
-                <div className="space-y-2">
-                  {accountSignals.map(s => (
-                    <div key={s.id} className="flex items-center gap-3 p-3 rounded-lg bg-slate-50">
-                      <SignalTypeIcon type={s.type} />
-                      <div className="flex-1"><p className="text-sm text-slate-700">{s.detail}</p><p className="text-xs text-slate-400">{s.type} · {s.date}</p></div>
-                      <Badge variant={s.status}>{s.status}</Badge>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+      <div className="bg-gradient-to-r from-emerald-50 to-emerald-100 border border-emerald-200 rounded-xl p-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="font-semibold text-emerald-900 flex items-center gap-2"><CheckCircle2 size={18} /> Engine Status: HEALTHY</h3>
+            <p className="text-sm text-emerald-700 mt-1">All systems operational</p>
           </div>
-          <div className="space-y-6">
-            <div className="bg-white rounded-xl border border-slate-200 p-5">
-              <h3 className="font-semibold text-slate-900 mb-3">Key Contacts</h3>
-              {accountContacts.length === 0 ? <p className="text-sm text-slate-400">No contacts mapped yet.</p> : (
-                <div className="space-y-3">
-                  {accountContacts.map(c => (
-                    <div key={c.id} className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-400 to-violet-600 flex items-center justify-center text-white text-xs font-bold">{c.name.split(" ").map(n => n[0]).join("")}</div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-slate-800 truncate">{c.name}</p>
-                        <p className="text-xs text-slate-500 truncate">{c.title}</p>
-                      </div>
-                      <Badge variant={c.status}>{c.status}</Badge>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-            <div className="bg-white rounded-xl border border-slate-200 p-5">
-              <h3 className="font-semibold text-slate-900 mb-3">Quick Actions</h3>
-              <div className="space-y-2">
-                <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-violet-50 rounded-lg transition-colors"><Mail size={14} className="text-violet-500" /> Start Outreach Sequence</button>
-                <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-violet-50 rounded-lg transition-colors"><Users size={14} className="text-violet-500" /> Enrich Contacts</button>
-                <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-violet-50 rounded-lg transition-colors"><Zap size={14} className="text-violet-500" /> Scan for Signals</button>
-                <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-violet-50 rounded-lg transition-colors"><FileText size={14} className="text-violet-500" /> View Playbook</button>
-              </div>
-            </div>
+          <div className="grid grid-cols-4 gap-6 text-right">
+            <div><p className="text-xs text-emerald-600">Scrapers Running</p><p className="text-2xl font-bold text-emerald-900 mt-1">15</p></div>
+            <div><p className="text-xs text-emerald-600">Signals Today</p><p className="text-2xl font-bold text-emerald-900 mt-1">{SIGNAL_ENGINE_METRICS.signalsToday}</p></div>
+            <div><p className="text-xs text-emerald-600">Classifier Accuracy</p><p className="text-2xl font-bold text-emerald-900 mt-1">{SIGNAL_ENGINE_METRICS.classifierAccuracy}%</p></div>
+            <div><p className="text-xs text-emerald-600">Avg Confidence</p><p className="text-2xl font-bold text-emerald-900 mt-1">{SIGNAL_ENGINE_METRICS.avgConfidence}%</p></div>
           </div>
         </div>
-      )}
+      </div>
 
-      {activeTab === "contacts" && (
-        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-          <table className="w-full">
-            <thead><tr className="border-b border-slate-100 bg-slate-50/50">
-              <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase">Contact</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Persona</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Channels</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Score</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Sequence</th>
-              <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Status</th>
+      <div className="bg-white rounded-xl border border-slate-200 p-5">
+        <h3 className="font-semibold text-slate-900 mb-4 flex items-center gap-2"><Database size={16} className="text-slate-600" /> Scraper Status (15 sources)</h3>
+        <div className="overflow-hidden">
+          <table className="w-full text-sm">
+            <thead><tr className="border-b border-slate-100 bg-slate-50">
+              <th className="text-left px-4 py-2 text-xs font-semibold text-slate-500 uppercase">Source</th>
+              <th className="text-left px-4 py-2 text-xs font-semibold text-slate-500 uppercase">Type</th>
+              <th className="text-left px-4 py-2 text-xs font-semibold text-slate-500 uppercase">Status</th>
+              <th className="text-left px-4 py-2 text-xs font-semibold text-slate-500 uppercase">Last Run</th>
+              <th className="text-right px-4 py-2 text-xs font-semibold text-slate-500 uppercase">Items</th>
+              <th className="text-left px-4 py-2 text-xs font-semibold text-slate-500 uppercase">Frequency</th>
+              <th className="text-right px-4 py-2 text-xs font-semibold text-slate-500 uppercase">Health</th>
             </tr></thead>
             <tbody>
-              {accountContacts.map(c => (
-                <tr key={c.id} className="border-b border-slate-50 hover:bg-slate-50">
-                  <td className="px-5 py-3">
-                    <p className="text-sm font-medium text-slate-800">{c.name}</p>
-                    <p className="text-xs text-slate-500">{c.title}</p>
+              {SCRAPER_SOURCES.map(src => (
+                <tr key={src.id} className="border-b border-slate-50 hover:bg-slate-50">
+                  <td className="px-4 py-3"><span className="font-medium text-slate-800">{src.name}</span></td>
+                  <td className="px-4 py-3"><SourceTypeBadge sourceType={src.type} /></td>
+                  <td className="px-4 py-3">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-2 h-2 rounded-full ${src.status === "active" ? "bg-emerald-500" : src.status === "warning" ? "bg-amber-500" : "bg-red-500"}`}></div>
+                      <span className="text-xs text-slate-600 capitalize">{src.status}</span>
+                    </div>
                   </td>
-                  <td className="px-4 py-3"><Badge>{c.persona}</Badge></td>
-                  <td className="px-4 py-3"><div className="flex gap-1.5">{c.email && <Mail size={14} className="text-slate-400" />}{c.linkedin && <Linkedin size={14} className="text-blue-500" />}{c.phone && <Phone size={14} className="text-slate-400" />}</div></td>
-                  <td className="px-4 py-3"><ScoreBadge score={c.signalScore} max={15} /></td>
-                  <td className="px-4 py-3"><span className="text-xs text-slate-600">{c.sequence}</span></td>
-                  <td className="px-4 py-3"><Badge variant={c.status}>{c.status}</Badge></td>
+                  <td className="px-4 py-3"><span className="text-xs text-slate-500">{src.lastRun}</span></td>
+                  <td className="px-4 py-3 text-right"><span className="text-xs font-medium text-slate-700">{src.itemsCollected}</span></td>
+                  <td className="px-4 py-3"><span className="text-xs text-slate-500">{src.frequency}</span></td>
+                  <td className="px-4 py-3 text-right"><span className="text-xs font-medium text-slate-700">{src.health}%</span></td>
                 </tr>
               ))}
             </tbody>
           </table>
-          {accountContacts.length === 0 && <div className="p-8 text-center text-sm text-slate-400">No contacts mapped. Click "Enrich Contacts" to find decision-makers.</div>}
         </div>
-      )}
+      </div>
 
-      {activeTab === "signals" && (
-        <div className="space-y-3">
-          {accountSignals.length === 0 ? <div className="bg-white rounded-xl border border-slate-200 p-8 text-center text-sm text-slate-400">No signals detected. Run signal scan to check.</div> : accountSignals.map(s => (
-            <div key={s.id} className="bg-white rounded-xl border border-slate-200 p-4 flex items-center gap-4">
-              <SignalTypeIcon type={s.type} />
-              <div className="flex-1">
-                <p className="text-sm font-medium text-slate-800">{s.detail}</p>
-                <div className="flex items-center gap-3 mt-1">
-                  <span className="text-xs text-slate-500">{s.type}</span>
-                  <span className="text-xs text-slate-400">{s.date}</span>
-                  <Badge variant={s.weight === "HIGH" ? "hot" : s.weight === "MEDIUM-HIGH" ? "warm" : "default"}>{s.weight}</Badge>
+      <div className="bg-white rounded-xl border border-slate-200 p-5">
+        <h3 className="font-semibold text-slate-900 mb-4 flex items-center gap-2"><Zap size={16} className="text-amber-500" /> Signal Processing Pipeline</h3>
+        <div className="flex items-center gap-4 py-8">
+          <div className="flex-1 text-center">
+            <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center mx-auto mb-2"><Database size={24} className="text-blue-600" /></div>
+            <p className="font-medium text-slate-900 text-sm">Collection</p>
+            <p className="text-xs text-slate-500 mt-1">{SCRAPER_SOURCES.reduce((sum, s) => sum + s.itemsCollected, 0)} items/day</p>
+          </div>
+          <div className="text-slate-300 text-2xl">→</div>
+          <div className="flex-1 text-center">
+            <div className="w-16 h-16 rounded-full bg-violet-100 flex items-center justify-center mx-auto mb-2"><Filter size={24} className="text-violet-600" /></div>
+            <p className="font-medium text-slate-900 text-sm">Deduplication</p>
+            <p className="text-xs text-slate-500 mt-1">87% unique</p>
+          </div>
+          <div className="text-slate-300 text-2xl">→</div>
+          <div className="flex-1 text-center">
+            <div className="w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center mx-auto mb-2"><BrainCircuit size={24} className="text-indigo-600" /></div>
+            <p className="font-medium text-slate-900 text-sm">NLP Classification</p>
+            <p className="text-xs text-slate-500 mt-1">{SIGNAL_ENGINE_METRICS.classifierAccuracy}% accurate</p>
+          </div>
+          <div className="text-slate-300 text-2xl">→</div>
+          <div className="flex-1 text-center">
+            <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-2"><Send size={24} className="text-emerald-600" /></div>
+            <p className="font-medium text-slate-900 text-sm">HubSpot Push</p>
+            <p className="text-xs text-slate-500 mt-1">{SIGNAL_ENGINE_METRICS.signalsToday} today</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-white rounded-xl border border-slate-200 p-5">
+          <h3 className="font-semibold text-slate-900 mb-4">Real-time Signal Feed (Last 10)</h3>
+          <div className="space-y-2 max-h-96 overflow-y-auto">
+            {SIGNALS.slice(0, 10).map(s => (
+              <div key={s.id} className="p-3 border border-slate-100 rounded-lg hover:bg-slate-50">
+                <div className="flex items-start gap-3 justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <SignalTypeIcon type={s.type} />
+                      <span className="text-xs font-medium text-slate-700">{s.detail.substring(0, 40)}...</span>
+                    </div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <SourceTypeBadge sourceType={s.sourceType} />
+                      <ConfidenceBadge confidence={s.confidence} />
+                      {s.nlpClassified && <Badge variant="default" className="text-xs">AI Classified</Badge>}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <button onClick={() => toggleVerify(s.id, true)} className={`px-2 py-1 rounded text-xs font-medium transition-colors ${verifiedSignals[s.id] === true ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-600 hover:bg-emerald-50"}`}><CheckCircle size={12} className="inline mr-1" />Verify</button>
+                    <button onClick={() => toggleVerify(s.id, false)} className={`px-2 py-1 rounded text-xs font-medium transition-colors ${verifiedSignals[s.id] === false ? "bg-red-100 text-red-700" : "bg-slate-100 text-slate-600 hover:bg-red-50"}`}><XCircle size={12} className="inline mr-1" />Reject</button>
+                  </div>
                 </div>
               </div>
-              <div className="text-right">
-                <ScoreBadge score={s.score} max={15} />
-                <p className="text-xs text-slate-400 mt-1">R:{s.recency} Rv:{s.relevance} A:{s.authority}</p>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      )}
 
-      {activeTab === "sequences" && (
-        <div className="bg-white rounded-xl border border-slate-200 p-5">
-          <h3 className="font-semibold text-slate-900 mb-4">Active Sequences for {account.name}</h3>
-          {accountContacts.filter(c => c.sequence !== "Not started" && c.sequence !== "Paused").length === 0 ? (
-            <p className="text-sm text-slate-400">No active sequences for this account.</p>
-          ) : (
-            <div className="space-y-4">
-              {accountContacts.filter(c => c.sequence !== "Not started").map(c => (
-                <div key={c.id} className="p-4 border border-slate-100 rounded-lg">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-slate-800">{c.name}</span>
-                    <Badge variant={c.sequence === "Paused" ? "paused" : "active"}>{c.sequence}</Badge>
+        <div className="space-y-6">
+          <div className="bg-white rounded-xl border border-slate-200 p-5">
+            <h3 className="font-semibold text-slate-900 mb-4">Confidence Distribution</h3>
+            <div className="space-y-3">
+              {confidenceData.map(d => (
+                <div key={d.range}>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-sm font-medium text-slate-700">{d.range}</span>
+                    <span className="text-sm font-bold text-slate-900">{d.count}</span>
                   </div>
-                  <div className="flex gap-1">
-                    {TIER1_SEQUENCE_STEPS.map((step, i) => (
-                      <div key={i} className={`flex-1 h-2 rounded-full ${step.status === "sent" ? "bg-violet-500" : step.status === "scheduled" ? "bg-violet-200" : "bg-slate-100"}`} title={`Day ${step.day}: ${step.action}`} />
-                    ))}
+                  <div className="w-full bg-slate-100 rounded-full h-2">
+                    <div className="h-full rounded-full" style={{ width: `${(d.count / SIGNALS.length) * 100}%`, background: d.color }}></div>
                   </div>
                 </div>
               ))}
             </div>
-          )}
-        </div>
-      )}
+          </div>
 
-      {activeTab === "notes" && (
-        <div className="bg-white rounded-xl border border-slate-200 p-5">
-          <h3 className="font-semibold text-slate-900 mb-3">Account Notes</h3>
-          <textarea className="w-full h-48 p-3 border border-slate-200 rounded-lg text-sm text-slate-700 resize-none focus:outline-none focus:ring-2 focus:ring-violet-500" defaultValue={account.notes} placeholder="Add notes about this account..." />
-          <div className="flex justify-end mt-3"><button className="px-4 py-1.5 bg-violet-600 text-white text-sm rounded-lg hover:bg-violet-700">Save Notes</button></div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default function ImprozoGTMPlatform() {
-  const [activeScreen, setActiveScreen] = useState("dashboard");
-  const [selectedAccount, setSelectedAccount] = useState(null);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
-
-  const navItems = [
-    { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { id: "accounts", label: "Accounts", icon: Building2 },
-    { id: "contacts", label: "Contacts", icon: Users },
-    { id: "signals", label: "Signals", icon: Zap },
-    { id: "sequences", label: "Sequences", icon: GitBranch },
-    { id: "pipeline", label: "Pipeline", icon: Target },
-    { id: "email-composer", label: "Email Composer", icon: Mail },
-    { id: "analytics", label: "Analytics", icon: BarChart3 },
-    { id: "playbooks", label: "Playbooks", icon: BookOpen },
-    { id: "team", label: "Team", icon: Award },
-  ];
-
-  const renderScreen = () => {
-    switch (activeScreen) {
-      case "dashboard": return <DashboardScreen setActiveScreen={setActiveScreen} setSelectedAccount={setSelectedAccount} />;
-      case "accounts": return <AccountsScreen setActiveScreen={setActiveScreen} setSelectedAccount={setSelectedAccount} />;
-      case "account-detail": return <AccountDetailScreen account={selectedAccount} setActiveScreen={setActiveScreen} />;
-      case "contacts": return <ContactsScreen />;
-      case "signals": return <SignalsScreen />;
-      case "sequences": return <SequencesScreen />;
-      case "pipeline": return <PipelineScreen />;
-      case "email-composer": return <EmailComposerScreen />;
-      case "analytics": return <AnalyticsScreen />;
-      case "playbooks": return <PlaybooksScreen />;
-      case "team": return <TeamScreen />;
-      default: return <DashboardScreen setActiveScreen={setActiveScreen} setSelectedAccount={setSelectedAccount} />;
-    }
-  };
-
-  return (
-    <div className="flex h-screen bg-slate-50 font-sans">
-      {/* Sidebar */}
-      <div className={`${sidebarCollapsed ? "w-16" : "w-56"} bg-slate-900 flex flex-col transition-all duration-200 flex-shrink-0`}>
-        <div className="p-4 flex items-center gap-3">
-          <div className="w-8 h-8 bg-gradient-to-br from-violet-500 to-violet-700 rounded-lg flex items-center justify-center text-white font-bold text-sm">I</div>
-          {!sidebarCollapsed && <div><p className="text-white font-bold text-sm">Improzo</p><p className="text-slate-400 text-[10px] uppercase tracking-widest">GTM Platform</p></div>}
-        </div>
-        <nav className="flex-1 px-2 py-2 space-y-0.5 overflow-y-auto">
-          {navItems.map(item => {
-            const isActive = activeScreen === item.id || (item.id === "accounts" && activeScreen === "account-detail");
-            return (
-              <button key={item.id} onClick={() => setActiveScreen(item.id)} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isActive ? "bg-violet-600 text-white" : "text-slate-400 hover:text-white hover:bg-slate-800"}`}>
-                <item.icon size={18} />
-                {!sidebarCollapsed && <span>{item.label}</span>}
-              </button>
-            );
-          })}
-        </nav>
-        <div className="p-3 border-t border-slate-800">
-          <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 text-sm">
-            {sidebarCollapsed ? <ChevronRight size={18} /> : <><ChevronLeft size={18} /><span>Collapse</span></>}
-          </button>
+          <div className="bg-white rounded-xl border border-slate-200 p-5">
+            <h3 className="font-semibold text-slate-900 mb-4">Signals by Source</h3>
+            <ResponsiveContainer width="100%" height={180}>
+              <PieChart>
+                <Pie data={signalsBySource} cx="50%" cy="50%" innerRadius={40} outerRadius={70} paddingAngle={2} dataKey="value">
+                  {signalsBySource.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Top Bar */}
-        <div className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-6 flex-shrink-0">
-          <div className="relative w-72">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-            <input type="text" placeholder="Search accounts, contacts, signals..." className="w-full pl-9 pr-3 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-slate-50" />
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <button onClick={() => setShowNotifications(!showNotifications)} className="relative p-2 rounded-lg hover:bg-slate-100">
-                <Bell size={18} className="text-slate-500" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-              </button>
-              {showNotifications && (
-                <div className="absolute right-0 top-full mt-2 w-80 bg-white rounded-xl border border-slate-200 shadow-xl z-50 p-4">
-                  <h4 className="font-semibold text-sm text-slate-900 mb-3">Notifications</h4>
-                  {SIGNALS.filter(s => s.status === "hot").slice(0, 3).map(s => (
-                    <div key={s.id} className="py-2 border-b border-slate-50 last:border-0">
-                      <p className="text-sm text-slate-700">{s.detail}</p>
-                      <p className="text-xs text-slate-400">{s.date}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-            <div className="flex items-center gap-2 pl-3 border-l border-slate-200">
-              <div className="w-7 h-7 bg-gradient-to-br from-violet-500 to-violet-600 rounded-full flex items-center justify-center text-white text-xs font-bold">TR</div>
-              <span className="text-sm font-medium text-slate-700">Tirth Ray</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Page Content */}
-        <div className="flex-1 overflow-y-auto p-6">
-          {renderScreen()}
-        </div>
+      <div className="bg-white rounded-xl border border-slate-200 p-5">
+        <h3 className="font-semibold text-slate-900 mb-4">Signals by Type</h3>
+        <ResponsiveContainer width="100%" height={250}>
+          <BarChart data={signalsByClassification}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+            <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+            <YAxis tick={{ fontSize: 11 }} />
+            <Tooltip />
+            <Bar dataKey="value" fill="#7c3aed" radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );
 }
 
-// ═══════════════════════════════════════════
-// SCREEN: CONTACTS
-// ═══════════════════════════════════════════
-
 function ContactsScreen() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterPersona, setFilterPersona] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
-
   const filtered = useMemo(() => CONTACTS.filter(c => {
     if (searchTerm && !c.name.toLowerCase().includes(searchTerm.toLowerCase()) && !c.account.toLowerCase().includes(searchTerm.toLowerCase())) return false;
     if (filterPersona !== "all" && c.persona !== filterPersona) return false;
     if (filterStatus !== "all" && c.status !== filterStatus) return false;
     return true;
   }), [searchTerm, filterPersona, filterStatus]);
-
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -779,33 +650,33 @@ function ContactsScreen() {
   );
 }
 
-// ═══════════════════════════════════════════
-// SCREEN: SIGNALS
-// ═══════════════════════════════════════════
-
 function SignalsScreen() {
   const [filterType, setFilterType] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
-
   const filtered = useMemo(() => SIGNALS.filter(s => {
     if (filterType !== "all" && s.type !== filterType) return false;
     if (filterStatus !== "all" && s.status !== filterStatus) return false;
     return true;
   }), [filterType, filterStatus]);
-
   const signalTypes = [...new Set(SIGNALS.map(s => s.type))];
+  const autoDetectedCount = SIGNALS.filter(s => s.nlpClassified).length;
+  const avgConfidence = Math.round(SIGNALS.reduce((sum, s) => sum + s.confidence, 0) / SIGNALS.length);
+  const scraperCount = SCRAPER_SOURCES.filter(s => s.status === "active").length;
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div><h1 className="text-2xl font-bold text-slate-900">Signal Scanner</h1><p className="text-sm text-slate-500 mt-1">{SIGNALS.length} signals detected · {SIGNALS.filter(s => s.status === "hot").length} hot · {SIGNALS.filter(s => s.status === "warm").length} warm</p></div>
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">Signal Scanner</h1>
+          <p className="text-sm text-slate-500 mt-1">{scraperCount} scrapers active · {SIGNALS.length} signals today · {avgConfidence}% classifier accuracy</p>
+        </div>
         <button className="px-3 py-1.5 bg-violet-600 text-white text-sm rounded-lg hover:bg-violet-700 flex items-center gap-1.5"><Zap size={14} /> Run Full Scan</button>
       </div>
 
       <div className="grid grid-cols-3 gap-4">
         <MetricCard label="Hot Signals (12+)" value={SIGNALS.filter(s => s.score >= 12).length} icon={AlertTriangle} color="red" sub="Immediate outreach needed" />
         <MetricCard label="Warm Signals (8-11)" value={SIGNALS.filter(s => s.score >= 8 && s.score < 12).length} icon={TrendingUp} color="amber" sub="Nurture sequence" />
-        <MetricCard label="Monitor (<8)" value={SIGNALS.filter(s => s.score < 8).length} icon={Eye} color="sky" sub="Watch list" />
+        <MetricCard label="Monitor (&lt;8)" value={SIGNALS.filter(s => s.score < 8).length} icon={Eye} color="sky" sub="Watch list" />
       </div>
 
       <div className="bg-white rounded-xl border border-slate-200 p-4">
@@ -831,18 +702,15 @@ function SignalsScreen() {
               <p className="text-sm font-medium text-slate-800">{s.detail}</p>
               <div className="flex items-center gap-3 mt-1 flex-wrap">
                 <span className="text-xs font-medium text-slate-700">{s.account}</span>
-                <Badge variant={s.weight === "HIGH" ? "hot" : s.weight === "VERY HIGH" ? "hot" : s.weight === "MEDIUM-HIGH" ? "warm" : "default"}>{s.weight}</Badge>
-                <span className="text-xs text-slate-400">{s.type}</span>
+                <SourceTypeBadge sourceType={s.sourceType} />
+                <ConfidenceBadge confidence={s.confidence} />
+                {s.nlpClassified && <Badge variant="default" className="text-xs">AI Classified</Badge>}
                 <span className="text-xs text-slate-400">{s.date}</span>
               </div>
             </div>
             <div className="text-right flex-shrink-0">
               <ScoreBadge score={s.score} max={15} />
-              <div className="flex gap-2 mt-1 text-xs text-slate-400">
-                <span title="Recency">R:{s.recency}</span>
-                <span title="Relevance">Rv:{s.relevance}</span>
-                <span title="Authority">A:{s.authority}</span>
-              </div>
+              <div className="flex gap-2 mt-1 text-xs text-slate-400"><span title="Recency">R:{s.recency}</span><span title="Relevance">Rv:{s.relevance}</span><span title="Authority">A:{s.authority}</span></div>
             </div>
             <Badge variant={s.status}>{s.status}</Badge>
           </div>
@@ -852,112 +720,45 @@ function SignalsScreen() {
   );
 }
 
-// ═══════════════════════════════════════════
-// SCREEN: SEQUENCES
-// ═══════════════════════════════════════════
-
 function SequencesScreen() {
-  const [selectedSeq, setSelectedSeq] = useState(null);
-
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div><h1 className="text-2xl font-bold text-slate-900">Outreach Sequences</h1><p className="text-sm text-slate-500 mt-1">{SEQUENCES.length} sequences · {SEQUENCES.filter(s => s.status === "active").length} active</p></div>
-        <button className="px-3 py-1.5 bg-violet-600 text-white text-sm rounded-lg hover:bg-violet-700 flex items-center gap-1.5"><Plus size={14} /> New Sequence</button>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div><h1 className="text-2xl font-bold text-slate-900">Sequences</h1><p className="text-sm text-slate-500 mt-1">{SEQUENCES.filter(s => s.status === "active").length} active sequences</p></div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {SEQUENCES.map(seq => (
-          <div key={seq.id} onClick={() => setSelectedSeq(selectedSeq?.id === seq.id ? null : seq)} className={`bg-white rounded-xl border p-5 cursor-pointer hover:shadow-md transition-all ${selectedSeq?.id === seq.id ? "border-violet-400 ring-2 ring-violet-100" : "border-slate-200"}`}>
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2">
-                <h3 className="font-semibold text-slate-900">{seq.name}</h3>
-                <Badge variant={seq.status}>{seq.status}</Badge>
-              </div>
-              <Badge variant={`tier${seq.tier}`}>Tier {seq.tier}</Badge>
+          <div key={seq.id} className="bg-white rounded-xl border border-slate-200 p-5">
+            <div className="flex items-start justify-between mb-4">
+              <div><h3 className="font-semibold text-slate-900">{seq.name}</h3><p className="text-xs text-slate-500 mt-1">Tier {seq.tier} · {seq.duration}</p></div>
+              <Badge variant={seq.status}>{seq.status}</Badge>
             </div>
-            <div className="grid grid-cols-4 gap-3 mb-3">
-              <div><p className="text-xs text-slate-500">Steps</p><p className="text-sm font-semibold text-slate-800">{seq.steps}</p></div>
-              <div><p className="text-xs text-slate-500">Duration</p><p className="text-sm font-semibold text-slate-800">{seq.duration}</p></div>
-              <div><p className="text-xs text-slate-500">Active</p><p className="text-sm font-semibold text-emerald-600">{seq.active}</p></div>
-              <div><p className="text-xs text-slate-500">Paused</p><p className="text-sm font-semibold text-amber-600">{seq.paused}</p></div>
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              <div className="p-3 bg-slate-50 rounded-lg"><p className="text-xs text-slate-500">Active</p><p className="text-lg font-bold text-slate-900 mt-1">{seq.active}</p></div>
+              <div className="p-3 bg-slate-50 rounded-lg"><p className="text-xs text-slate-500">Steps</p><p className="text-lg font-bold text-slate-900 mt-1">{seq.steps}</p></div>
             </div>
-            <div className="flex gap-1.5">
-              {seq.channels.map(ch => (
-                <span key={ch} className="flex items-center gap-1 px-2 py-0.5 bg-slate-100 rounded text-xs text-slate-600"><ChannelIcon channel={ch} size={10} />{ch}</span>
-              ))}
-            </div>
+            <div className="flex flex-wrap gap-1">{seq.channels.map(ch => <Badge key={ch} variant="default" className="text-xs">{ch}</Badge>)}</div>
           </div>
         ))}
       </div>
-
-      {selectedSeq && selectedSeq.tier === 1 && (
-        <div className="bg-white rounded-xl border border-slate-200 p-5">
-          <h3 className="font-semibold text-slate-900 mb-4">Sequence Timeline: {selectedSeq.name}</h3>
-          <div className="space-y-0">
-            {TIER1_SEQUENCE_STEPS.map((step, i) => (
-              <div key={i} className="flex items-start gap-4 relative">
-                <div className="flex flex-col items-center">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center border-2 ${step.status === "sent" ? "bg-violet-600 border-violet-600 text-white" : step.status === "scheduled" ? "bg-violet-100 border-violet-300 text-violet-600" : "bg-white border-slate-200 text-slate-400"}`}>
-                    <ChannelIcon channel={step.channel} size={14} />
-                  </div>
-                  {i < TIER1_SEQUENCE_STEPS.length - 1 && <div className={`w-0.5 h-8 ${step.status === "sent" ? "bg-violet-400" : "bg-slate-200"}`} />}
-                </div>
-                <div className="flex-1 pb-4">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-medium text-slate-500">Day {step.day}</span>
-                    <span className="text-xs px-1.5 py-0.5 bg-slate-100 rounded text-slate-500">{step.channel}</span>
-                    <Badge variant={step.status === "sent" ? "success" : step.status === "scheduled" ? "warm" : "default"}>{step.status}</Badge>
-                  </div>
-                  <p className="text-sm text-slate-700 mt-0.5">{step.action}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }
-
-// ═══════════════════════════════════════════
-// SCREEN: PIPELINE
-// ═══════════════════════════════════════════
 
 function PipelineScreen() {
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div><h1 className="text-2xl font-bold text-slate-900">Pipeline</h1><p className="text-sm text-slate-500 mt-1">8 deals · $800K - $1.8M potential value</p></div>
-        <button className="px-3 py-1.5 bg-violet-600 text-white text-sm rounded-lg hover:bg-violet-700 flex items-center gap-1.5"><Plus size={14} /> Add Deal</button>
-      </div>
-      <div className="flex gap-4 overflow-x-auto pb-4">
+      <div><h1 className="text-2xl font-bold text-slate-900">Pipeline</h1><p className="text-sm text-slate-500 mt-1">{PIPELINE_STAGES.reduce((sum, s) => sum + s.deals.length, 0)} total deals · ${DASHBOARD_METRICS.pipelineValue} potential value</p></div>
+      <div className="grid grid-cols-1 lg:grid-cols-7 gap-4">
         {PIPELINE_STAGES.map(stage => (
-          <div key={stage.name} className="flex-shrink-0 w-56">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-slate-700">{stage.name}</h3>
-              <span className="text-xs bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded-full">{stage.deals.length}</span>
-            </div>
-            <div className="space-y-2 min-h-[200px]">
+          <div key={stage.name} className="bg-white rounded-xl border border-slate-200 p-4">
+            <h3 className="font-semibold text-slate-900 text-sm mb-3">{stage.name}</h3>
+            <p className="text-2xl font-bold text-slate-700 mb-4">{stage.deals.length}</p>
+            <div className="space-y-2">
               {stage.deals.map(deal => (
-                <div key={deal.id} className="bg-white rounded-lg border border-slate-200 p-3 hover:shadow-md transition-shadow cursor-pointer">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-6 h-6 rounded flex items-center justify-center text-white text-[10px] font-bold" style={{ background: deal.color }}>{deal.account[0]}</div>
-                    <span className="text-sm font-medium text-slate-800">{deal.account}</span>
-                  </div>
-                  <p className="text-xs text-slate-500 mb-2">{deal.value}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-slate-400">{deal.probability}% prob</span>
-                    <span className="text-xs text-slate-400">{deal.days}d</span>
-                  </div>
-                  <div className="w-full bg-slate-100 rounded-full h-1 mt-2">
-                    <div className="h-1 rounded-full bg-violet-500" style={{ width: `${deal.probability}%` }} />
-                  </div>
+                <div key={deal.id} className="p-2.5 bg-slate-50 rounded-lg border-l-4" style={{ borderColor: deal.color }}>
+                  <p className="text-sm font-medium text-slate-800">{deal.account}</p>
+                  <p className="text-xs text-slate-500 mt-0.5">{deal.value}</p>
                 </div>
               ))}
-              {stage.deals.length === 0 && (
-                <div className="border-2 border-dashed border-slate-200 rounded-lg p-4 text-center text-xs text-slate-400">No deals</div>
-              )}
             </div>
           </div>
         ))}
@@ -966,114 +767,28 @@ function PipelineScreen() {
   );
 }
 
-// ═══════════════════════════════════════════
-// SCREEN: EMAIL COMPOSER
-// ═══════════════════════════════════════════
-
 function EmailComposerScreen() {
-  const [selectedTemplate, setSelectedTemplate] = useState("new-hire");
-  const [selectedContact, setSelectedContact] = useState(CONTACTS[0]);
-
-  const templates = [
-    { id: "new-hire", name: "New Hire Signal", subject: "Congrats on the move, {first_name}", preview: "Saw you recently joined {company} as {title}. Having built and scaled pharma GCC analytics teams — most recently a 120-person operation across 62 countries at BMS — I know the first 90 days are critical..." },
-    { id: "job-posting", name: "Job Posting Signal", subject: "Saw {company} is building out {function}", preview: "Noticed {company} is hiring for {role_count} {function} roles in Hyderabad. When we helped a similar pharma GCC stand up their analytics team, we had them productive in weeks, not quarters..." },
-    { id: "veeva-migration", name: "Veeva Migration", subject: "Veeva CRM → Vault at {company}?", preview: "Hearing rumblings about {company} evaluating CRM-to-Vault. We've led these migrations at enterprise pharma scale — the sequencing of data migration, user training, and multi-country rollout is where most teams underestimate complexity..." },
-    { id: "breakup", name: "Breakup Email", subject: "Closing the loop, {first_name}", preview: "I've reached out a few times and haven't heard back — totally understand you're busy. I'll close the loop here. If pharma GCC analytics, data platform modernization, or Veeva migration ever hits your desk, happy to be a sounding board..." },
-  ];
-
-  const activeTemplate = templates.find(t => t.id === selectedTemplate);
-
   return (
     <div className="space-y-6">
-      <div><h1 className="text-2xl font-bold text-slate-900">Email Composer</h1><p className="text-sm text-slate-500 mt-1">Craft personalized outreach using signal-based templates</p></div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="space-y-4">
-          <div className="bg-white rounded-xl border border-slate-200 p-4">
-            <h3 className="font-semibold text-sm text-slate-900 mb-3">Select Template</h3>
-            <div className="space-y-1.5">
-              {templates.map(t => (
-                <button key={t.id} onClick={() => setSelectedTemplate(t.id)} className={`w-full text-left px-3 py-2.5 rounded-lg text-sm transition-colors ${selectedTemplate === t.id ? "bg-violet-50 text-violet-700 border border-violet-200" : "text-slate-600 hover:bg-slate-50 border border-transparent"}`}>{t.name}</button>
-              ))}
-            </div>
-          </div>
-          <div className="bg-white rounded-xl border border-slate-200 p-4">
-            <h3 className="font-semibold text-sm text-slate-900 mb-3">Select Contact</h3>
-            <div className="space-y-1.5 max-h-60 overflow-y-auto">
-              {CONTACTS.filter(c => c.status === "hot" || c.status === "warm").map(c => (
-                <button key={c.id} onClick={() => setSelectedContact(c)} className={`w-full text-left px-3 py-2 rounded-lg text-sm flex items-center gap-2 transition-colors ${selectedContact?.id === c.id ? "bg-violet-50 border border-violet-200" : "hover:bg-slate-50 border border-transparent"}`}>
-                  <div className="w-6 h-6 rounded-full bg-gradient-to-br from-violet-400 to-violet-600 flex items-center justify-center text-white text-[10px] font-bold">{c.name.split(" ").map(n => n[0]).join("")}</div>
-                  <div className="min-w-0"><p className="text-sm text-slate-800 truncate">{c.name}</p><p className="text-xs text-slate-400 truncate">{c.account}</p></div>
-                  <Badge variant={c.status} className="ml-auto flex-shrink-0">{c.status}</Badge>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="lg:col-span-2 bg-white rounded-xl border border-slate-200 p-5">
-          <div className="space-y-4">
-            <div>
-              <label className="text-xs font-medium text-slate-500 uppercase">To</label>
-              <input type="text" value={selectedContact ? `${selectedContact.name} <${selectedContact.email}>` : ""} readOnly className="w-full mt-1 px-3 py-2 border border-slate-200 rounded-lg text-sm bg-slate-50" />
-            </div>
-            <div>
-              <label className="text-xs font-medium text-slate-500 uppercase">Subject</label>
-              <input type="text" defaultValue={activeTemplate?.subject.replace("{first_name}", selectedContact?.name?.split(" ")[0] || "").replace("{company}", selectedContact?.account || "")} className="w-full mt-1 px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500" />
-            </div>
-            <div>
-              <label className="text-xs font-medium text-slate-500 uppercase">Body</label>
-              <textarea defaultValue={activeTemplate?.preview.replace("{first_name}", selectedContact?.name?.split(" ")[0] || "").replace("{company}", selectedContact?.account || "").replace("{title}", selectedContact?.title || "")} className="w-full mt-1 px-3 py-3 border border-slate-200 rounded-lg text-sm h-48 resize-none focus:outline-none focus:ring-2 focus:ring-violet-500 leading-relaxed" />
-            </div>
-            <div className="flex items-center justify-between pt-2 border-t border-slate-100">
-              <div className="flex gap-2">
-                <button className="px-3 py-1.5 text-sm text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50">Save Draft</button>
-                <button className="px-3 py-1.5 text-sm text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 flex items-center gap-1"><Zap size={12} /> AI Personalize</button>
-              </div>
-              <div className="flex gap-2">
-                <button className="px-3 py-1.5 text-sm text-violet-600 border border-violet-200 rounded-lg hover:bg-violet-50">Schedule</button>
-                <button className="px-4 py-1.5 bg-violet-600 text-white text-sm rounded-lg hover:bg-violet-700 flex items-center gap-1.5"><Send size={14} /> Send</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <h1 className="text-2xl font-bold text-slate-900">Email Composer</h1>
+      <div className="bg-white rounded-xl border border-slate-200 p-8 text-center text-slate-500">Email composer interface coming soon...</div>
     </div>
   );
 }
 
-// ═══════════════════════════════════════════
-// SCREEN: ANALYTICS
-// ═══════════════════════════════════════════
-
 function AnalyticsScreen() {
-  const funnelData = [
-    { stage: "TAM", value: 52, pct: "100%" },
-    { stage: "Enriched", value: 38, pct: "73%" },
-    { stage: "Verified", value: 31, pct: "60%" },
-    { stage: "In Sequence", value: 8, pct: "15%" },
-    { stage: "Responded", value: 3, pct: "6%" },
-    { stage: "Meeting", value: 0, pct: "0%" },
-  ];
-
-  const outreachPerf = [
-    { week: "W1", sent: 8, opened: 5, replied: 1, meetings: 0 },
-    { week: "W2", sent: 16, opened: 11, replied: 2, meetings: 0 },
-    { week: "W3", sent: 24, opened: 16, replied: 3, meetings: 0 },
-  ];
-
+  const funnelData = [ { stage: "TAM", value: 52, pct: "100%" }, { stage: "Enriched", value: 38, pct: "73%" }, { stage: "Verified", value: 31, pct: "60%" }, { stage: "In Sequence", value: 8, pct: "15%" }, { stage: "Responded", value: 3, pct: "6%" }, { stage: "Meeting", value: 0, pct: "0%" }, ];
+  const outreachPerf = [ { week: "W1", sent: 8, opened: 5, replied: 1, meetings: 0 }, { week: "W2", sent: 16, opened: 11, replied: 2, meetings: 0 }, { week: "W3", sent: 24, opened: 16, replied: 3, meetings: 0 }, ];
   const accountScores = ACCOUNTS.slice(0, 6).map(a => ({ name: a.name.length > 10 ? a.name.slice(0, 9) + "..." : a.name, score: a.icpScore, signals: a.signals * 3 }));
-
   return (
     <div className="space-y-6">
       <div><h1 className="text-2xl font-bold text-slate-900">Analytics</h1><p className="text-sm text-slate-500 mt-1">Pipeline performance and outreach metrics</p></div>
-
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <MetricCard label="Email Open Rate" value="67%" icon={Eye} color="violet" trend="+5% vs last week" trendDir="up" />
         <MetricCard label="Reply Rate" value="12.5%" icon={MessageSquare} color="emerald" trend="+2.1%" trendDir="up" />
         <MetricCard label="Avg Signal Score" value="10.2" icon={Zap} color="amber" sub="across 12 signals" />
         <MetricCard label="Pipeline Velocity" value="14d" icon={TrendingUp} color="sky" sub="avg stage duration" />
       </div>
-
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white rounded-xl border border-slate-200 p-5">
           <h3 className="font-semibold text-slate-900 mb-4">Contact Funnel</h3>
@@ -1091,7 +806,6 @@ function AnalyticsScreen() {
             ))}
           </div>
         </div>
-
         <div className="bg-white rounded-xl border border-slate-200 p-5">
           <h3 className="font-semibold text-slate-900 mb-4">Outreach Performance</h3>
           <ResponsiveContainer width="100%" height={220}>
@@ -1108,7 +822,6 @@ function AnalyticsScreen() {
           </ResponsiveContainer>
         </div>
       </div>
-
       <div className="bg-white rounded-xl border border-slate-200 p-5">
         <h3 className="font-semibold text-slate-900 mb-4">Account Engagement Score</h3>
         <ResponsiveContainer width="100%" height={220}>
@@ -1127,13 +840,8 @@ function AnalyticsScreen() {
   );
 }
 
-// ═══════════════════════════════════════════
-// SCREEN: PLAYBOOKS
-// ═══════════════════════════════════════════
-
 function PlaybooksScreen() {
   const [expandedPlaybook, setExpandedPlaybook] = useState(null);
-
   const playbooks = [
     { id: "objections", name: "Objection Handling", icon: MessageSquare, items: [
       { trigger: '"We have internal resources"', response: "We typically come in for specialized spikes — Veeva migrations, platform builds, AI POCs — where pharma-specific expertise accelerates your timeline." },
@@ -1155,7 +863,6 @@ function PlaybooksScreen() {
       { trigger: "Budget Likelihood (1-5)", response: "Known budget/RFP = 5 · Expansion signals = 3 · No budget indicators = 1" },
     ]},
   ];
-
   return (
     <div className="space-y-6">
       <div><h1 className="text-2xl font-bold text-slate-900">Playbooks</h1><p className="text-sm text-slate-500 mt-1">Battle-tested frameworks for outbound execution</p></div>
@@ -1184,10 +891,6 @@ function PlaybooksScreen() {
   );
 }
 
-// ═══════════════════════════════════════════
-// SCREEN: TEAM
-// ═══════════════════════════════════════════
-
 function TeamScreen() {
   const team = [
     { name: "Tirth Ray", role: "VP Data & AI GCC", focus: "Outbound engine, BD strategy, client relationships", hours: "~20 hrs/week on outbound", accounts: ["Novartis", "BMS", "Amgen", "Sanofi", "Pfizer", "AstraZeneca"], background: "20+ years pharma commercial tech. Former BMS (120-person team, 62 countries), Pfizer, Novartis, IQVIA.", avatar: "TR", color: "from-violet-500 to-violet-600" },
@@ -1195,7 +898,6 @@ function TeamScreen() {
     { name: "BD Associate", role: "Planned — Month 3", focus: "Tier 2/3 outreach, CRM management", hours: "Full-time (planned)", accounts: [], background: "To be hired. Will handle Tier 2/3 volume outreach and CRM ops.", avatar: "BD", color: "from-slate-400 to-slate-500" },
     { name: "Content Marketer", role: "Planned — Month 6", focus: "LinkedIn content, thought leadership, inbound lead gen", hours: "Full-time (planned)", accounts: [], background: "To be hired. Will drive inbound through content and brand building.", avatar: "CM", color: "from-slate-400 to-slate-500" },
   ];
-
   const techStack = [
     { tool: "Apollo.io", purpose: "Prospecting, contact data, intent signals", status: "setup" },
     { tool: "Instantly.ai", purpose: "Cold email, warmup, deliverability", status: "setup" },
@@ -1206,11 +908,9 @@ function TeamScreen() {
     { tool: "HeyGen", purpose: "AI video for Tier 1 prospects", status: "optional" },
     { tool: "Claude Code", purpose: "Enrichment scripts, signal scanning, personalization", status: "active" },
   ];
-
   return (
     <div className="space-y-6">
       <div><h1 className="text-2xl font-bold text-slate-900">Team</h1><p className="text-sm text-slate-500 mt-1">Ownership, roles, and technology stack</p></div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {team.map(t => (
           <div key={t.name} className="bg-white rounded-xl border border-slate-200 p-5">
@@ -1221,16 +921,13 @@ function TeamScreen() {
                 <p className="text-sm text-violet-600">{t.role}</p>
                 <p className="text-xs text-slate-500 mt-2">{t.focus}</p>
                 <p className="text-xs text-slate-400 mt-1">{t.hours}</p>
-                {t.accounts.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mt-3">{t.accounts.map(a => <Badge key={a} variant="tier1">{a}</Badge>)}</div>
-                )}
+                {t.accounts.length > 0 && (<div className="flex flex-wrap gap-1 mt-3">{t.accounts.map(a => <Badge key={a} variant="tier1">{a}</Badge>)}</div>)}
                 <p className="text-xs text-slate-500 mt-3 leading-relaxed">{t.background}</p>
               </div>
             </div>
           </div>
         ))}
       </div>
-
       <div className="bg-white rounded-xl border border-slate-200 p-5">
         <h3 className="font-semibold text-slate-900 mb-4">Technology Stack</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -1241,6 +938,270 @@ function TeamScreen() {
               <Badge variant={t.status === "active" ? "success" : t.status === "setup" ? "warm" : "default"}>{t.status}</Badge>
             </div>
           ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AccountDetailScreen({ account, setActiveScreen }) {
+  const [activeTab, setActiveTab] = useState("overview");
+  if (!account) return null;
+  const accountSignals = SIGNALS.filter(s => s.account === account.name);
+  const accountContacts = CONTACTS.filter(c => c.account === account.name);
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center gap-3">
+        <button onClick={() => setActiveScreen("accounts")} className="p-1.5 rounded-lg hover:bg-slate-100"><ChevronLeft size={18} className="text-slate-500" /></button>
+        <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg" style={{ background: account.color }}>{account.logo}</div>
+        <div className="flex-1">
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold text-slate-900">{account.name}</h1>
+            <Badge variant={`tier${account.tier}`}>Tier {account.tier}</Badge>
+            <Badge variant={account.status === "active" ? "success" : account.status === "cooling" ? "paused" : "default"}>{account.status}</Badge>
+          </div>
+          <p className="text-sm text-slate-500">{account.industry} · {account.gccLocation} · {account.headcount} headcount · {account.revenue} revenue</p>
+        </div>
+        <ScoreBadge score={account.icpScore} />
+      </div>
+      <div className="flex gap-1 border-b border-slate-200 pb-0">
+        {["overview", "contacts", "signals", "sequences", "notes"].map(tab => (
+          <button key={tab} onClick={() => setActiveTab(tab)} className={`px-4 py-2 text-sm font-medium capitalize rounded-t-lg transition-colors ${activeTab === tab ? "text-violet-700 bg-violet-50 border-b-2 border-violet-600" : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"}`}>{tab}</button>
+        ))}
+      </div>
+      {activeTab === "overview" && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-6">
+            <div className="bg-white rounded-xl border border-slate-200 p-5">
+              <h3 className="font-semibold text-slate-900 mb-3">Account Intelligence</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">{account.notes}</p>
+              <div className="grid grid-cols-2 gap-4 mt-4">
+                <div className="p-3 bg-slate-50 rounded-lg"><p className="text-xs text-slate-500">Stage</p><p className="text-sm font-medium text-slate-800 mt-1">{account.stage}</p></div>
+                <div className="p-3 bg-slate-50 rounded-lg"><p className="text-xs text-slate-500">Owner</p><p className="text-sm font-medium text-slate-800 mt-1">{account.owner}</p></div>
+                <div className="p-3 bg-slate-50 rounded-lg"><p className="text-xs text-slate-500">Active Signals</p><p className="text-sm font-medium text-slate-800 mt-1">{accountSignals.length}</p></div>
+                <div className="p-3 bg-slate-50 rounded-lg"><p className="text-xs text-slate-500">Contacts Mapped</p><p className="text-sm font-medium text-slate-800 mt-1">{accountContacts.length}</p></div>
+              </div>
+            </div>
+            <div className="bg-white rounded-xl border border-slate-200 p-5">
+              <h3 className="font-semibold text-slate-900 mb-3">Recent Signals</h3>
+              {accountSignals.length === 0 ? <p className="text-sm text-slate-400">No signals detected yet.</p> : (
+                <div className="space-y-2">
+                  {accountSignals.map(s => (
+                    <div key={s.id} className="flex items-center gap-3 p-3 rounded-lg bg-slate-50">
+                      <SignalTypeIcon type={s.type} />
+                      <div className="flex-1"><p className="text-sm text-slate-700">{s.detail}</p><p className="text-xs text-slate-400">{s.type} · {s.date}</p></div>
+                      <Badge variant={s.status}>{s.status}</Badge>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="space-y-6">
+            <div className="bg-white rounded-xl border border-slate-200 p-5">
+              <h3 className="font-semibold text-slate-900 mb-3">Key Contacts</h3>
+              {accountContacts.length === 0 ? <p className="text-sm text-slate-400">No contacts mapped yet.</p> : (
+                <div className="space-y-3">
+                  {accountContacts.map(c => (
+                    <div key={c.id} className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-violet-400 to-violet-600 flex items-center justify-center text-white text-xs font-bold">{c.name.split(" ").map(n => n[0]).join("")}</div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-slate-800 truncate">{c.name}</p>
+                        <p className="text-xs text-slate-500 truncate">{c.title}</p>
+                      </div>
+                      <Badge variant={c.status}>{c.status}</Badge>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="bg-white rounded-xl border border-slate-200 p-5">
+              <h3 className="font-semibold text-slate-900 mb-3">Quick Actions</h3>
+              <div className="space-y-2">
+                <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-violet-50 rounded-lg transition-colors"><Mail size={14} className="text-violet-500" /> Start Outreach Sequence</button>
+                <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-violet-50 rounded-lg transition-colors"><Users size={14} className="text-violet-500" /> Enrich Contacts</button>
+                <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-violet-50 rounded-lg transition-colors"><Zap size={14} className="text-violet-500" /> Scan for Signals</button>
+                <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-slate-700 hover:bg-violet-50 rounded-lg transition-colors"><FileText size={14} className="text-violet-500" /> View Playbook</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {activeTab === "contacts" && (
+        <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+          <table className="w-full">
+            <thead><tr className="border-b border-slate-100 bg-slate-50/50">
+              <th className="text-left px-5 py-3 text-xs font-semibold text-slate-500 uppercase">Contact</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Persona</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Channels</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Score</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Sequence</th>
+              <th className="text-left px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Status</th>
+            </tr></thead>
+            <tbody>
+              {accountContacts.map(c => (
+                <tr key={c.id} className="border-b border-slate-50 hover:bg-slate-50">
+                  <td className="px-5 py-3"><p className="text-sm font-medium text-slate-800">{c.name}</p><p className="text-xs text-slate-500">{c.title}</p></td>
+                  <td className="px-4 py-3"><Badge>{c.persona}</Badge></td>
+                  <td className="px-4 py-3"><div className="flex gap-1.5">{c.email && <Mail size={14} className="text-slate-400" />}{c.linkedin && <Linkedin size={14} className="text-blue-500" />}{c.phone && <Phone size={14} className="text-slate-400" />}</div></td>
+                  <td className="px-4 py-3"><ScoreBadge score={c.signalScore} max={15} /></td>
+                  <td className="px-4 py-3"><span className="text-xs text-slate-600">{c.sequence}</span></td>
+                  <td className="px-4 py-3"><Badge variant={c.status}>{c.status}</Badge></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {accountContacts.length === 0 && <div className="p-8 text-center text-sm text-slate-400">No contacts mapped.</div>}
+        </div>
+      )}
+      {activeTab === "signals" && (
+        <div className="space-y-3">
+          {accountSignals.length === 0 ? <div className="bg-white rounded-xl border border-slate-200 p-8 text-center text-sm text-slate-400">No signals detected.</div> : accountSignals.map(s => (
+            <div key={s.id} className="bg-white rounded-xl border border-slate-200 p-4 flex items-center gap-4">
+              <SignalTypeIcon type={s.type} />
+              <div className="flex-1">
+                <p className="text-sm font-medium text-slate-800">{s.detail}</p>
+                <div className="flex items-center gap-3 mt-1"><span className="text-xs text-slate-500">{s.type}</span><span className="text-xs text-slate-400">{s.date}</span><Badge variant={s.weight === "HIGH" ? "hot" : s.weight === "MEDIUM-HIGH" ? "warm" : "default"}>{s.weight}</Badge></div>
+              </div>
+              <div className="text-right">
+                <ScoreBadge score={s.score} max={15} />
+                <p className="text-xs text-slate-400 mt-1">R:{s.recency} Rv:{s.relevance} A:{s.authority}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      {activeTab === "sequences" && (
+        <div className="bg-white rounded-xl border border-slate-200 p-5">
+          <h3 className="font-semibold text-slate-900 mb-4">Active Sequences for {account.name}</h3>
+          {accountContacts.filter(c => c.sequence !== "Not started" && c.sequence !== "Paused").length === 0 ? (
+            <p className="text-sm text-slate-400">No active sequences for this account.</p>
+          ) : (
+            <div className="space-y-4">
+              {accountContacts.filter(c => c.sequence !== "Not started").map(c => (
+                <div key={c.id} className="p-4 border border-slate-100 rounded-lg">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-slate-800">{c.name}</span>
+                    <Badge variant={c.sequence === "Paused" ? "paused" : "active"}>{c.sequence}</Badge>
+                  </div>
+                  <div className="flex gap-1">
+                    {TIER1_SEQUENCE_STEPS.map((step, i) => (
+                      <div key={i} className={`flex-1 h-2 rounded-full ${step.status === "sent" ? "bg-violet-500" : step.status === "scheduled" ? "bg-violet-200" : "bg-slate-100"}`} title={`Day ${step.day}: ${step.action}`} />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+      {activeTab === "notes" && (
+        <div className="bg-white rounded-xl border border-slate-200 p-5">
+          <h3 className="font-semibold text-slate-900 mb-3">Account Notes</h3>
+          <textarea className="w-full h-48 p-3 border border-slate-200 rounded-lg text-sm text-slate-700 resize-none focus:outline-none focus:ring-2 focus:ring-violet-500" defaultValue={account.notes} placeholder="Add notes about this account..." />
+          <div className="flex justify-end mt-3"><button className="px-4 py-1.5 bg-violet-600 text-white text-sm rounded-lg hover:bg-violet-700">Save Notes</button></div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function ImprozoGTMPlatform() {
+  const [activeScreen, setActiveScreen] = useState("dashboard");
+  const [selectedAccount, setSelectedAccount] = useState(null);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  const navItems = [
+    { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { id: "accounts", label: "Accounts", icon: Building2 },
+    { id: "contacts", label: "Contacts", icon: Users },
+    { id: "signals", label: "Signals", icon: Zap },
+    { id: "signal-engine", label: "Signal Engine", icon: Cpu },
+    { id: "sequences", label: "Sequences", icon: GitBranch },
+    { id: "pipeline", label: "Pipeline", icon: Target },
+    { id: "email-composer", label: "Email Composer", icon: Mail },
+    { id: "analytics", label: "Analytics", icon: BarChart3 },
+    { id: "playbooks", label: "Playbooks", icon: BookOpen },
+    { id: "team", label: "Team", icon: Award },
+  ];
+
+  const renderScreen = () => {
+    switch (activeScreen) {
+      case "dashboard": return <DashboardScreen setActiveScreen={setActiveScreen} setSelectedAccount={setSelectedAccount} />;
+      case "accounts": return <AccountsScreen setActiveScreen={setActiveScreen} setSelectedAccount={setSelectedAccount} />;
+      case "account-detail": return <AccountDetailScreen account={selectedAccount} setActiveScreen={setActiveScreen} />;
+      case "contacts": return <ContactsScreen />;
+      case "signals": return <SignalsScreen />;
+      case "signal-engine": return <SignalEngineScreen />;
+      case "sequences": return <SequencesScreen />;
+      case "pipeline": return <PipelineScreen />;
+      case "email-composer": return <EmailComposerScreen />;
+      case "analytics": return <AnalyticsScreen />;
+      case "playbooks": return <PlaybooksScreen />;
+      case "team": return <TeamScreen />;
+      default: return <DashboardScreen setActiveScreen={setActiveScreen} setSelectedAccount={setSelectedAccount} />;
+    }
+  };
+
+  return (
+    <div className="flex h-screen bg-slate-50 font-sans">
+      <div className={`${sidebarCollapsed ? "w-16" : "w-56"} bg-slate-900 flex flex-col transition-all duration-200 flex-shrink-0`}>
+        <div className="p-4 flex items-center gap-3">
+          <div className="w-8 h-8 bg-gradient-to-br from-violet-500 to-violet-700 rounded-lg flex items-center justify-center text-white font-bold text-sm">I</div>
+          {!sidebarCollapsed && <div><p className="text-white font-bold text-sm">Improzo</p><p className="text-slate-400 text-[10px] uppercase tracking-widest">GTM Platform</p></div>}
+        </div>
+        <nav className="flex-1 px-2 py-2 space-y-0.5 overflow-y-auto">
+          {navItems.map(item => {
+            const isActive = activeScreen === item.id || (item.id === "accounts" && activeScreen === "account-detail");
+            return (
+              <button key={item.id} onClick={() => setActiveScreen(item.id)} className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isActive ? "bg-violet-600 text-white" : "text-slate-400 hover:text-white hover:bg-slate-800"}`}>
+                <item.icon size={18} />
+                {!sidebarCollapsed && <span>{item.label}</span>}
+              </button>
+            );
+          })}
+        </nav>
+        <div className="p-3 border-t border-slate-800">
+          <button onClick={() => setSidebarCollapsed(!sidebarCollapsed)} className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 text-sm">
+            {sidebarCollapsed ? <ChevronRight size={18} /> : <><ChevronLeft size={18} /><span>Collapse</span></>}
+          </button>
+        </div>
+      </div>
+
+      <div className="flex-1 flex flex-col min-w-0">
+        <div className="h-14 bg-white border-b border-slate-200 flex items-center justify-between px-6 flex-shrink-0">
+          <div className="relative w-72">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input type="text" placeholder="Search accounts, contacts, signals..." className="w-full pl-9 pr-3 py-1.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent bg-slate-50" />
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="relative">
+              <button onClick={() => setShowNotifications(!showNotifications)} className="relative p-2 rounded-lg hover:bg-slate-100">
+                <Bell size={18} className="text-slate-500" />
+                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+              </button>
+              {showNotifications && (
+                <div className="absolute right-0 top-full mt-2 w-80 bg-white rounded-xl border border-slate-200 shadow-xl z-50 p-4">
+                  <h4 className="font-semibold text-sm text-slate-900 mb-3">Notifications</h4>
+                  {SIGNALS.filter(s => s.status === "hot").slice(0, 3).map(s => (
+                    <div key={s.id} className="py-2 border-b border-slate-50 last:border-0">
+                      <p className="text-sm text-slate-700">{s.detail}</p>
+                      <p className="text-xs text-slate-400">{s.date}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div className="flex items-center gap-2 pl-3 border-l border-slate-200">
+              <div className="w-7 h-7 bg-gradient-to-br from-violet-500 to-violet-600 rounded-full flex items-center justify-center text-white text-xs font-bold">TR</div>
+              <span className="text-sm font-medium text-slate-700">Tirth Ray</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-6">
+          {renderScreen()}
         </div>
       </div>
     </div>
